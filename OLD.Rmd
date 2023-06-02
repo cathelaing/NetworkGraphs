@@ -1,0 +1,455 @@
+---
+```{r plots}
+# Data type comparisons - REMOVE THESE
+
+path_length_plot <- ggplot(data=subset(SWD_red,
+                                      data_type %in% c("target", "actual")),
+                          aes(x = age, y = path_length)) +
+  geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
+  scale_colour_manual(name = "Data type", labels = c("Actual", "Target"), values = c("#F8766D", "#00BFC4")) + 
+  scale_fill_manual(name = "Data type", labels = c("Actual", "Target"), values = c("#F8766D", "#00BFC4")) + 
+  xlab("Age (months)") +
+  ylab("Mean Path Length") +
+  theme_bw()  +
+  theme(text = element_text(size = 20),
+        legend.position = "bottom")
+
+clust_coef_plot <- ggplot(data=subset(SWD_red,
+                                      data_type %in% c("target", "actual")),
+                          aes(x = age, y = clust_coef_avg)) +
+  geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
+  scale_colour_manual(name = "Data type", labels = c("Actual", "Target"), values = c("#F8766D", "#00BFC4")) + 
+  scale_fill_manual(name = "Data type", labels = c("Actual", "Target"), values = c("#F8766D", "#00BFC4")) + 
+  xlab("Age (months)") +
+  ylab("Clustering Coefficient") +
+  theme_bw()  +
+  theme(text = element_text(size = 20),
+        legend.position = "bottom")
+```
+
+## Copy into an .Rmd. Should all be in the right order
+
+# Network Graphs
+
+PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To compare the network structure of Target versus Actual data, mean path length and clustering coefficient values were generated for both the Target and Actual networks, using the *igraph()* package in R [@R-igraph], as outlined below. 
+
+```{r interactions, message=FALSE, warning=FALSE}
+
+# age * word length
+
+age_length_slope_A <- sim_slopes(model3_A,
+                                 pred=length_scaled,
+                                 modx=age_scaled,
+                                 johnson_neyman=FALSE)
+
+age_length_A <- age_length_slope_A$slopes %>%
+  as.data.frame %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  rename(
+    "age_scaled"=`Value of age_scaled`,
+    "b"=`Est.`,
+    "Scaled age" = `Effect`,
+    "z" = `z val.`
+  ) %>%
+  mutate(
+    b=as.numeric(b),
+    p=as.numeric(p),
+    p=scales::pvalue(p),
+    Interaction = ifelse(`Scaled age` == 1, "Age x Length", ""),
+    # Corpus = ifelse(`Scaled age` ==1, "English", ""),
+    `Data type` = ifelse(`Scaled age`==1, "Actual", ""), 
+    `Scaled age` = fct_recode(`Scaled age`,
+                              `-1SD` = "1",
+                              Mean = "2",
+                              `+1SD` = "3")) %>%
+  dplyr::select(Interaction, `Data type`, `Scaled age`, b, z, p)
+
+age_length_slope_T <- sim_slopes(model3_T,
+                                 pred=length_scaled,
+                                 modx=age_scaled,
+                                 johnson_neyman=FALSE)
+
+age_length_T <- age_length_slope_T$slopes %>%
+  as.data.frame %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  rename(
+    "age_scaled"=`Value of age_scaled`,
+    "b"=`Est.`,
+    "Scaled age" = `Effect`,
+    "z" = `z val.`
+  ) %>%
+  mutate(
+    b=as.numeric(b),
+    p=as.numeric(p),
+    p=scales::pvalue(p),
+    Interaction = ifelse(`Scaled age` == 1, "Age x Length", ""),
+    # Corpus = ifelse(`Scaled age` ==1, "English", ""),
+    `Data type` = ifelse(`Scaled age`==1, "Target", ""), 
+    `Scaled age` = fct_recode(`Scaled age`,
+                              `-1SD` = "1",
+                              Mean = "2",
+                              `+1SD` = "3")) %>%
+  dplyr::select(Interaction, `Data type`, `Scaled age`, b, z, p)
+
+# age * PAT
+
+age_PAT_slope_A <- sim_slopes(model3_A,
+                              pred=PAT_scaled,
+                              modx=age_scaled,
+                              johnson_neyman=FALSE)
+
+age_PAT_A <- age_PAT_slope_A$slopes %>%
+  as.data.frame %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  rename(
+    "age_scaled"=`Value of age_scaled`,
+    "b"=`Est.`,
+    "Scaled age" = `Effect`,
+    "z" = `z val.`
+  ) %>%
+  mutate(
+    b=as.numeric(b),
+    p=as.numeric(p),
+    p=scales::pvalue(p),
+    Interaction = ifelse(`Scaled age` == 1, "Age x PAT", ""),
+    # Corpus = ifelse(`Scaled age` ==1, "English", ""),
+    `Data type` = ifelse(`Scaled age`==1, "Actual", ""), 
+    `Scaled age` = fct_recode(`Scaled age`,
+                              `-1SD` = "1",
+                              Mean = "2",
+                              `+1SD` = "3")) %>%
+  dplyr::select(Interaction, `Data type`, `Scaled age`, b, z, p)
+
+```
+
+```{r interaction plot prep, message=FALSE, warning=FALSE}
+
+age.length_A <- effect('length_scaled*age_scaled', model3_A,
+                       xlevels=list(age_scaled=c(-1, 0, 1),
+                                    se=TRUE, confidence.level=.95, typical=mean))
+
+age.length_A <- as.data.frame(age.length_A)
+
+age.length_A$age_scaled <- factor(age.length_A$age_scaled,
+                                  levels=c(-1, 0, 1),
+                                  labels=c("-1SD", "Mean", "+1SD"))
+
+age.length_A$length_scaled <- factor(age.length_A$length_scaled)
+
+age.length_A <- age.length_A %>%
+  rename("factor"="length_scaled") %>%
+  mutate(Interaction="Word length",
+         data_type="Actual")
+
+extrafont::loadfonts()
+
+age.length_T <- effect('length_scaled*age_scaled', model3_T,
+                       xlevels=list(age_scaled=c(-1, 0, 1),
+                                    se=TRUE, confidence.level=.95, typical=mean))
+
+age.length_T <- as.data.frame(age.length_T)
+
+age.length_T$age_scaled <- factor(age.length_T$age_scaled,
+                                  levels=c(-1, 0, 1),
+                                  labels=c("-1SD", "Mean", "+1SD"))
+
+age.length_T$length_scaled <- factor(age.length_T$length_scaled)
+
+age.length_T <- age.length_T %>%
+  rename("factor"="length_scaled") %>%
+  mutate(Interaction="Word length",
+         data_type="Target")
+
+age.PAT_A <- effects::effect('age_scaled*PAT_scaled', model3_A,
+                    xlevels=list(age_scaled=c(-1, 0, 1),
+                                 se=TRUE, confidence.level=.95, typical=mean))
+
+age.PAT_A <- as.data.frame(age.PAT_A)
+
+age.PAT_A$age_scaled <- factor(age.PAT_A$age_scaled,
+                               levels=c(-1, 0, 1),
+                               labels=c("-1SD", "Mean", "+1SD"))
+
+age.PAT_A$PAT_scaled <- factor(age.PAT_A$PAT_scaled)
+
+age.PAT_A <- age.PAT_A %>%
+  rename("factor"="PAT_scaled") %>%
+  mutate(Interaction="PAT values",
+         data_type="Actual")
+
+slopes <- rbind(age.length_A, age.length_T, age.PAT_A)
+
+```
+
+``` {r interaction plots}
+Plot.slopes <- ggplot(data=age.PAT_A, aes(x=(as.numeric(as.character(factor), decreasing=TRUE)), y=fit, group=age_scaled))+
+  #geom_rect(data=subset(all_slopes, Corpus == 'French' & (Interaction == "PAT values" | Interaction == "PAQ values"))) +  #aes(fill=Corpus),xmin=-Inf,xmax=Inf,
+  #              ymin=-Inf,ymax=Inf,alpha=0.1, fill="gray90") +
+  geom_smooth(size=1, aes(color=age_scaled)) +
+  scale_colour_discrete(name="Age") +
+  #ylim(0,.4)+
+  ylab("Predicted probability of a word being \nlearned in the following month")+
+  xlab("Growth value (scaled)")+
+  #ggtitle("Age * PAQ Values (English, Actual)") +
+  #guides(color=guide_legend(override.aes=list(fill=NA))) +
+  theme_bw(base_size=14) +
+  theme(#    panel.grid.major=element_blank(),
+    # panel.grid.minor=element_blank(),
+    legend.title=element_blank(),
+    legend.position="bottom") #+
+# facet_grid(vars(data_type), vars(Interaction), scales="free")
+```
+
+```{r Table all slopes, message=FALSE, warning=FALSE}
+
+rownames(age_PAT_A) <- NULL
+
+age_PAT_A.table <- age_PAT_A %>%
+  dplyr::select(`Scaled age`, b, z, p)
+
+```
+
+
+```{r table-all-slopes, echo=F, message=FALSE, warning=FALSE, comment=F}
+cap="Simple slopes analyses taken at the mean and ±1SD around the mean scaled age in the dataset for the significant Age * PAT interaction generated in the logistic regression model above for Actual data. All values are z-scored."
+
+kable(age_PAT_A.table, "latex", booktabs=T, longtable=T, 
+      caption=cap, align="c")  %>% # removed digits here
+  kable_styling()
+```
+
+```{r figure-plot-slopes, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(Plot.slopes)
+cap <- sprintf("Interaction plot showing effect of Age * PAT growth value interaction on predicted learning outcomes in the Actual data. Lines show mean AoP (z-scored) and +/- 1SD around the mean. PAT values are z-scored.")
+```
+
+
+
+## Data type comparisons
+
+
+```{r data type comparison, message=FALSE, warning=FALSE}
+
+dat_pred <- lmer(PAT_scaled ~ data_type +
+                   length_scaled*age_scaled +
+                   freq_scaled*age_scaled +
+                   corpus +
+                   (1+age_scaled|Speaker),
+                 data=subset(reg_dat, age == (AOP-1)))
+
+# ggplot(subset(reg_dat, age == (AOP-1)), aes(y = PAT_scaled, x = age, colour = data_type)) +
+# geom_point(shape = 1, aes(colour = data_type),
+#            position =  position_jitter(.3)) + 
+#   geom_smooth()
+
+dat_pred_null <- lmer(PAT_scaled ~ #data_type +
+                        length_scaled*age_scaled +
+                        freq_scaled*age_scaled +
+                        corpus +
+                        (1+age_scaled|Speaker),
+                      data=subset(reg_dat, age == (AOP-1)))
+
+dat_pred_model <- anova(dat_pred, dat_pred_null)
+
+dat_pred_model_df <- dat_pred_model$Df[2]
+dat_pred_model_chisq <- dat_pred_model$Chisq[2]
+dat_pred_model_p.value <- dat_pred_model$`Pr(>Chisq)`[2]
+
+model.summary.dat_pred <- summary(dat_pred)
+
+table.model.summary.dat_pred<- model.summary.dat_pred$coefficients %>%
+  as.data.frame %>%
+  rename("p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  )
+
+dat.pred_beta <- subset(table.model.summary.dat_pred, Effect == "Data typetarget")$Estimate
+dat.pred_p <- subset(table.model.summary.dat_pred, Effect == "Data typetarget")$p
+
+```
+
+To test this hypothesis, a linear mixed-effects regression model was run using the *lmerTest* package in R [@kuznetsova_lmertest_2017]. For each word, data was only included for the month before the word's age of production, such that PAT values indicated connectivity in the learned month, rather than all of the potential months in which the word could have first been produced, as above. The model included PAT growth values as the dependent variable and Data type, Word length, Word frequency, Corpus, and Age as fixed effects. Word length and Word frequency were both qualified with an interaction with Age; subject was included as a random effect with a by-subject random slope included for the effect of Age. Likelihood ratio tests comparing models with and without the effect of Data type revealed a significant difference between the full and the null models ($\chi^2 (`r dat_pred_model_df`)$=`r dat_pred_model_chisq`, *p*`r printp(dat_pred_model_p.value)`); PAT values for the Actual data were significantly higher than those of the Target data (*b*=`r printnum(dat.pred_beta)`, *p*`r printp(dat.pred_p)`), thereby supporting H3. 
+
+To interrogate H3 further, the Target and Actual networks were analysed by generating network graphs using the *igraph()* package in R [@R-igraph]. PAT-like network growth assumes two key structural components: low mean path length (i.e. shorter edges between nodes) and high clustering coefficient (i.e. dense clusters of nodes). If the Actual networks are more PAT-like than the Target networks, we would expect them to differ in these two properties: Actual networks should have a significantly lower mean path length, and a significantly higher clustering coefficient. 
+
+```{r network graph model comparisons, message=FALSE, warning=FALSE, include=FALSE}
+
+
+# Mean path length
+
+global_pathlength_model <- lmerTest::lmer(path_length ~ data_type + age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+#summary(global_pathlength_model)
+
+global_pathlength_model_null <- lmerTest::lmer(path_length ~ age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+
+pathlength <- anova(global_pathlength_model, global_pathlength_model_null)
+
+pathlength_df <- pathlength$Df[2]
+pathlength_chisq <- pathlength$Chisq[2]
+pathlength_p.value <- pathlength$`Pr(>Chisq)`[2]
+
+# Clustering coefficient
+
+global_clust_model <- lmerTest::lmer(clust_coef_avg ~ data_type + age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+#summary(global_clust_model)
+
+global_clust_model_null <- lmerTest::lmer(clust_coef_avg ~ age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+
+clustcoef <- anova(global_clust_model, global_clust_model_null)
+
+clustcoef_df <- clustcoef$Df[2]
+clustcoef_chisq <- clustcoef$Chisq[2]
+clustcoef_p.value <- clustcoef$`Pr(>Chisq)`[2]
+
+```
+
+```{r network graphs model outputs, include=FALSE}
+
+table.model.output <- rbind(pathlength, clustcoef) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Variable = ifelse(Model == "global_pathlength_model", "Path Length", "Clustering Coefficient"),
+             p=scales::pvalue(p)) %>%
+  select(Variable, `Df`, `Chisq`, `p`)
+
+pathlength.summary <- summary(global_pathlength_model)
+
+pathlength.summary_tab <- pathlength.summary$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Data type" = "Data typetarget",
+                             "Corpus" = "CorpusFrench")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+clustcoef.summary <- summary(global_clust_model)
+
+clustcoef.summary_tab <- clustcoef.summary$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  dplyr::select(beta, SE, t, p)
+
+network.model.summary <- cbind(pathlength.summary_tab, clustcoef.summary_tab)
+
+rownames(network.model.summary) <- NULL
+
+PL_beta <- (subset(pathlength.summary_tab, Effect == "Data type")$beta)*100
+
+```
+
+Mean path length and clustering coefficient were calculated for each child's monthly networks. Target and Actual data was then compared using linear mixed-effects regression. Mean path length and clustering coefficient were included as dependent variables in two individual models, with Data type (Actual vs. Target), age and corpus as fixed effects and subject as a random effect with a by-subject random slope for the effect of age. Nested model comparisons showed that data type significantly predicted the mean path length within a network ($\chi^2 (`r pathlength_df`)$=`r pathlength_chisq`, *p*`r printp(pathlength_p.value)`) but not clustering coefficient ($\chi^2 (`r clustcoef_df`)$=`r clustcoef_chisq`, *p*=`r printp(clustcoef_p.value)`); mean path length was  `r PL_beta`% higher in Target compared with Actual data. See Table \@ref(tab:table-network-model-outputs) and Figures \@ref(fig:figure-path-length) and \@ref(fig:figure-clust-coef).
+
+```{r table-network-model-outputs, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear mixed effects regression models testing the effect of Data type (Actual vs. Target, Actual as baseline) on mean path length and clustering coefficient as dependent variables, with corpus (English vs. French) and Age as additional fixed effects and subject as a random effect. By-subject random slopes were included for the effect of Age."
+knitr::kable(network.model.summary, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=1, "Mean Path Length"=4, "Clustering Coefficient"=4)) %>%
+  kable_styling()
+```
+
+
+```{r figure-path-length, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_plot)
+cap <- sprintf("Change in mean path length over time, in Actual compared with Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+```{r figure-clust-coef, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(clust_coef_plot)
+cap <- sprintf("Change in average clustering coefficient over time, in Actual compared with Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```title: "OLD"
+output: pdf_document
+date: "2023-03-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+From the markdown Readme:
+
+3. **globalsmallworlddata**: again, this binds together two sets of data, one for each corpus.
+
+This dataset includes the network properties relevant to small-world networks, generated using the igraph() package. These data are established by calculating the network size and degree for each child's data in each month. Average path length, mean degree and clustering coefficient (average and global) are then calculated for each monthly network. Variables in this dataset are as follows:
+
+- *age*: Month in each child's dataset
+- *path_length*: Mean path length for each monthly network.
+- *mean_k*: Mean degree for all nodes in each month.
+- *numNodes*: Network size (number of nodes in the network).
+- *clust_coef_avg*: Mean clustering coefficient for each monthly network.
+
+
+
+
+As expected, later-learned words were less well-connected in the networks, independent of any consideration of PAT- or PAQ-like growth. Negative correlations were found in all children's data; these were all significant at *p*<.05 except Anais (French corpus). See Table S\@ref(tab:table-aop-deg-corr) and Figure S\@ref(fig:Figure-AOP-deg-corr).

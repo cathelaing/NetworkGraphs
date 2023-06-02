@@ -1,0 +1,36 @@
+---
+title: "NetworkGraphs"
+author: "Catherine Laing"
+date: "2023-06-02"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Infants' early words are phonologically similar to one another, if not in the vocabulary items they choose to produce, but in the way they produce them. This has been well-documented in a number of case studies [refs], and can be clearly observed in datasets of early productions. For example, Deuchar and Quay's [ref] record of their Spanish-English bilingual child's first [how many?] words shows that many of her first words are produced with an open CV syllable, and she produces a number of identical forms to refer to a range of different (though phonologically-similar) words. This suggests that infants may be drawing on a systematic approach to early productions, whereby a small subset of simple phonological forms are used to produce a range of more varied and phonologically-challenging adult targets. This paper will consider this systematicity from a networks perspective, drawing on network graphs of the early vocabulary to determine how similar infants' words are to one another, and how this changes over time.
+
+In previous work [Laing, under review], I draw on network analysis to show that in the first three years of life, infants' acquisition and production can be predicted based on the words they already produce and how they produce them. That is, a word is more likely to be acquired if it is phonologically more similar to existing words in the productive repertoire, and if infants' production of the new word is more similar to their existing productions. This reflects the systematicity that has been well-documented in previous studies [refs]. Moreover, the phonological properties of infants' word productions are more similar to one another than their adult target forms would suggest. This seems obvious when we consider the reality of infants' early phonological productions, but, crucially, drawing on network analysis has shown to be effective in coding a large amount of early production data, which can be exceptionally time-consuming, and quantitatively analysing this data across a group of infants and a range of languages.
+
+Network analysis is an increasingly popular method of analysing lexical acquisition. Network models allow the analysis of connectivity within a system (in our case, the lexical or phonological system), and can track how that connectivity changes over time. For this reason, a number of studies have considered vocabulary acquisition, in infants acquiring their first language [] and adults acquiring a novel language []. In the L1 acquisition literature, network analysis began with studies of semantic relatedness, testing the extent to which infants acquired clusters of words that were similar in semantic space, for example, animal words or labels for people [check refs]. More recently, work has started looking at the extent to which the words most commonly acquired in the early vocabulary, across a range of languages, are similar to one another on a phonological dimension. Contrary to the expectations set out here, these accounts did not present a clear case for phonological similarity in the developing vocabulary. However, as I set out in Laing [under review], 
+
+network analysis
+
+talk about previous work
+
+what's different about this study
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
