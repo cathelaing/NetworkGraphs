@@ -21,10 +21,9 @@ In Laing [under review] I addressed these issues by drawing on Euclidean distanc
 
 Previous work, including that by Laing [UR], Kalinowski [in prep - CHECK] and others [refs], uses network growth algorithms to test whether learning can be predicted based on the words that infants already know or produce. If infants' early word acquisition and production is as systematic as previous work suggests, then we would expect that it is possible to predict learning based on the known words in the infant's existing lexicon. Methods and results differ between these accounts, as outlined in part above, but Laing, Kalinowski and Siew and Vitevitch all show that infants' and children's word learning can be predicted based on how likely new words are to connect to existing words in the lexicon (i.e. new words are more likely to be similar to known words). Laing [UR] compared this across adult target forms and infants' actual productions to find that infants' early words are phonologically more similar to one another than we would expect from analysing the target forms alone. That is, phonological systematicity may drive lexical selection, but drives production even more so.
 
-These network growth models present a compelling computational approach to observing systematicity in the developing lexicon, but they don't tell us 
+These network growth models present a compelling computational approach to observing systematicity in the developing lexicon, but they don't give us a clear view into the extent to which early-acquired forms are produced in a phonologically similar way. That is, network growth models analyse connectivity (are two words similar, yes or no? if yes then they are connected in the network), rather than phonological distance (*how* similar are two words in the network?). This study expands on previous work, and builds on findings from Laing [UR] by analysing network graphs of infants' early lexicons. This provides an insight into the properties of the network, including how densely connected the network is, and the phonological distance between items in the network. Following Laing, this paper will analyse infants' actual productions as well as the adult target forms, to test the extent to which systematicity is present in prodution, in terms of both the words infants select in early development (Target forms), and how they produce them (Actual forms). 
 
-This study expands on this previous work, and builds on findings from Laing [UR] by 
-
+- I probably want something about selected and adapted words
 
 ```{r cars}
 summary(cars)
