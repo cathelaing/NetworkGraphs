@@ -25,11 +25,33 @@ These network growth models present a compelling computational approach to obser
 
 - I probably want something about selected and adapted words
 
-```{r cars}
-summary(cars)
-```
+## Methods
 
-## Including Plots
+# Data extraction and preparation
+
+Data were drawn from two corpora on PhonBank (https://phonbank.talkbank.org/): Providence [American English, @demuth_word-minimality_2006] and Lyon [French, @demuth_katherine_prosodically-conditioned_2008]. These were selected due to their equivalent data collection methods and the fact that the infants' productions, as well as the corresponding target forms, are phonetically transcribed. Nine infants' (5 English, 4 French, 4 boys overall) data were extracted using Phon [@hedlund_gregory_phon_2020], from the transcript with their first-recorded word to the final transcript taken at age 2;6. Infants were recorded in the home on a fortnightly basis, participating in naturalistic interactions with their caregivers. Two of the American infants were recorded weekly during some periods of data collection, but this is not an issue for this analysis since no between-child comparisons will be made. See Demuth et al. [-@demuth_word-minimality_2006] and Demuth and Tremblay [-@demuth_katherine_prosodically-conditioned_2008] for full details of data collection.
+
+Extracted data was filtered to include only words featuring on the communicative development inventory (CDI) of the respective language, including all variants of a given form. For example, plurals were included alongside the singular noun form, and variable verb conjugations alongside their corresponding infinitive verb form. These data were used to create a network for each infant, whereby all words in a given month that hadn't been produced in previous months were included as new items in the network. When a word had been produced in previous months, it was not included. While this means that the data does not capture change in the production of a single form over time, it allows us to observe network growth at the point of acquisition for each word form. 
+
+To determine the structure of the network, the first step was to create distance values between each word and each other word in the network. This was first done using a 'global' network of all forms produced by the infant up to the final session at 2;6, to create a large distance matrix for each infant that incorporated all word productions. Distance values were generated using methods set out in Monaghan et al. [-@monaghan_measures_2010], using distinctive features to generate a set of phonetic values for each word that could then be compared with all other words (note that only consonants were analysed, given that vowels are highly variable in early production and also very difficult to transcribe accurately; [@donegan_normal_2013; @kent_what_2020]). Euclidean distance between the values of each word and each other word in each infant's global network was then used to determine how close/distant words were from one another. Often, infants produced multiple tokens of the same word type in a given month, often with high variability across tokens. Because it was not possible to generate networks with all tokens included (even with only single word types included, the final dataset for all nine infants includes over 5.5 million data points), a mean value for each distinctive feature was established across tokens, meaning that each word's distinctive feature value represents the variability of the infant's production of a given word. This may not be a perfect measure, but it is more representative than taking, for example, the first instance of each word type.
+
+Distance scores were generated between each word and each other word in each child's dataset, for both Target and Actual forms. These scores were then normalised, and a normalised distance of 0.25 was chosen to indicate connectivity. That is, words were said to be connected in the network if their distance score was ≤0.25. This accounted for the lower quartile of connectivity across the dataset. See Supplementary Materials for an overview of how this measure was established.
+
+adapt this bit to fit with the data used in this analysis (and re-write):
+
+<!-- The final dataset includes `r round(types$n)` word types overall, aggregated across infants (English=`r round(subset(types.corpus, corpus == "English")$n)`, French=`r round(subset(types.corpus, corpus == "French")$n)`). On average, there were `r round(tokens$mean_tok)` tokens of each word type (SD = `r round(tokens$sd_tok)`). See Table \@ref(tab:table-data-overview) for a breakdown by corpus and child. All but `r syl.4` tokens (all French) in the data had three syllables or fewer in the target form, with `r round(subset(syls, corpus == "English")$mean_syl)` syllable on average in the English data (SD = `r round(subset(syls, corpus == "English")$sd_syl,2)`) and `r round(subset(syls, corpus == "French")$mean_syl,2)` in the French data (SD = `r round(subset(syls, corpus == "French")$sd_syl,2)`). -->
+
+# Network graphs
+
+The prepared data was then used to generate a series of network graphs for each infant using the *igraph()* package in R [@R-igraph]. One network was generated per month, for each month in the dataset, and these grew cumulatively such that the network at time-point *n*+1 included all words at time-point *n*, plus all additional words produced for the first time at *n*+1.  
+
+The *igraph()* package generates graphs that include all nodes (whether or not they are connected to other nodes), and accounts for the distance between nodes, as well as the clustering of nodes in graphical space. 
+
+PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To compare the network structure of Target versus Actual data, mean path length and clustering coefficient values were generated for both the Target and Actual networks, using the *igraph()* package in R [@R-igraph], as outlined below. 
+
+ 
+
+
 
 You can also embed plots, for example:
 
