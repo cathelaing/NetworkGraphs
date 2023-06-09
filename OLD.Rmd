@@ -1,6 +1,5 @@
 ---
 ```{r plots}
-# Data type comparisons - REMOVE THESE
 
 path_length_plot <- ggplot(data=subset(SWD_red,
                                       data_type %in% c("target", "actual")),

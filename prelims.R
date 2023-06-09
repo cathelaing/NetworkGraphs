@@ -19,11 +19,42 @@ library(janitor)
 library(ggraph)
 library(data.table)
 library(linguisticsdown)
-library(ggridges)
-library(mgcv) 
-library(itsadug)
-source("gamm_hacks.r")
-#library(sjPlot)
+library(igraph)
+
+# add this to prep files eventually
+
+session_data_P <- read_csv("Data/comparison_data_providence.csv") %>%    # need to add ordinal session numbers for GAMMs
+  group_by(Speaker, age) %>%
+  tally() %>%
+  filter(n > 1) %>%
+  dplyr::select(Speaker, age) %>%
+  group_by(Speaker, age) %>% 
+  tally() %>%
+  filter(!(Speaker == "Alex" & age == "16")) %>%
+  mutate(session_ordinal = row_number()) %>%
+  dplyr::select(-n)
+
+session_data_L <- read_csv("Data/comparison_data_lyon.csv") %>%    # need to add ordinal session numbers for GAMMs
+  group_by(Speaker, age) %>%
+  tally() %>%
+  filter(n > 1) %>%
+  dplyr::select(Speaker, age) %>%
+  group_by(Speaker, age) %>% 
+  tally() %>%
+  filter(!(Speaker == "Anais" & age == "12")) %>%
+  mutate(session_ordinal = row_number()) %>%
+  dplyr::select(-n)
+
+globalsmallworlddata_L <- feather::read_feather("Data/globalsmallworlddata_comparison_lyon.feather") %>% 
+  mutate(corpus = "French") %>% 
+  left_join(session_data_L)
+
+globalsmallworlddata_P <- feather::read_feather("Data/globalsmallworlddata_comparison_providence.feather") %>% 
+  mutate(corpus = "English") %>% 
+  left_join(session_data_P)
+
+globalsmallworlddata <- rbind(globalsmallworlddata_P, globalsmallworlddata_L) %>%
+  dplyr::select(-lowerCI, -upperCI, -lowerQuantile, -upperQuantile) # remove variables that aren't used
 
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
