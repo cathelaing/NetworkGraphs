@@ -1,15 +1,70 @@
 ---
 title: "NetworkGraphs"
-author: "Catherine Laing"
-date: "2023-06-02"
-output: pdf_document
+author:
+- name: Catherine E. Laing
+  affiliation: '1'
+  corresponding: yes
+  address: Department of Language and Linguistic Science, University of York, Heslington, YO10 5DD.
+  email: catherine.laing@york.ac.uk
+authornote: |
+ All code and associated data for this manuscript can be found at https://github.com/cathelaing/NetworkGraphs.
+shorttitle: Network graphs of early phonological development
+output:
+  papaja::apa6_pdf: default
+  #extra_dependencies: ["float"]
+  #papaja::apa6_word: default
+abstract: "ADD."
+keywords: systematicity, phonological development, preferential attachment, networks analysis
+#wordcount: "" 
+bibliography: Systematicity.bib
+#floatsintext: yes
+figsintext: no
+figurelist: yes
+tablelist: no
+footnotelist: no
+linenumbers: no
+numbersections: false
+mask: no
+draft: no
+documentclass: apa6
+header-includes:
+-  \DeclareDelayedFloatFlavor{kableExtra}{table}
+- \usepackage{tipa}
+#- \newfontfamily\PF{Arial}
+classoption: man
+affiliation:
+- id: '1'
+  institution: University of York, York, UK
+latex_engine: xelatex
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+source("prelims.R")
+r_refs(file="r-references.bib")
+
+
+my_citations <- cite_r(
+  file="r-references.bib"
+  , pkgs=c("tidyverse", "igraph", "papaja", "lmerTest")
+  , withhold=FALSE
+  , footnote=TRUE
+)
+
+# load files
+
+SWD_red <- globalsmallworlddata[which(complete.cases(globalsmallworlddata[
+  ,c('path_length', 'clust_coef_global', 'clust_coef_avg', 'mean_k')])),]
+
+stat_sum_df <- function(fun, geom="crossbar", ...) {
+  stat_summary(fun.data=fun, colour="red", geom=geom, width=0.2, ...)
+}
+
 ```
 
 Infants' early words are phonologically similar to one another, if not in the vocabulary items they choose to produce, but in the way they produce them. This has been well-documented in a number of case studies [refs], and can be clearly observed in datasets of early productions. For example, Deuchar and Quay's [ref] record of their Spanish-English bilingual child's first [how many?] words shows that many of her first words are produced with an open CV syllable, and she produces a number of identical forms to refer to a range of different (though phonologically-similar) words. This suggests that infants may be drawing on a systematic approach to early productions, whereby a small subset of simple phonological forms are used to produce a range of more varied and phonologically-challenging adult targets. This paper will consider this systematicity from a networks perspective, drawing on network graphs of the early vocabulary to determine how similar infants' words are to one another, and how this changes over time.
+
+Systematicity in early phonological development is most comprehensively discussed in work by Vihman [REFs]. In more than four decades of work incorporating data from hundreds of infants acquiring an impressive range of languages, Vihman demonstrates a clear systematicity in infants' path to target-like word production. From the initial 'surprisingly accurate' [ref?] forms that appear in the first stages of word production, infants are shown to draw on what they know: they generally choose, for first production, words that are simple in their target phonological form and that contain consonants that are already familiar from the most common syllables of canonical babble [@mccune_early_2001]. These forms are, in Vihman's terms, *selected* for first word production owing to their easily-producible features. As the vocabulary grows, infant must necessarily acquire forms that do not contain such accessible phonological or segmental properties. Here we begin to see regression in the accuracy of early production, as infants systematically adapt forms to fit the most common structures and segments in their repertoire. When words are systematically altered to fit an evidently dominant pattern in the child's output, these forms are said to be *adapted*. That is, systematicity is apparent not just in the earliest words, but across the trajectory of acquisition as infants deal with the challenges of early word production by relying on well-rehearsed output forms. That is, over the first months of lexical development at least, infants' productions of newly-acquired words are likely to match their productions of existing words in the lexicon.
 
 In previous work [Laing, under review], I draw on network analysis to show that in the first three years of life, infants' acquisition and production can be predicted based on the words they already produce and how they produce them. That is, a word is more likely to be acquired if it is phonologically more similar to existing words in the productive repertoire, and if infants' production of the new word is more similar to their existing productions. This reflects the systematicity that has been well-documented in previous studies [refs]. Moreover, the phonological properties of infants' word productions are more similar to one another than their adult target forms would suggest. This seems obvious when we consider the reality of infants' early phonological productions, but, crucially, drawing on network analysis has shown to be effective in coding a large amount of early production data, which can be exceptionally time-consuming, and quantitatively analysing this data across a group of infants and a range of languages.
 
@@ -21,9 +76,15 @@ In Laing [under review] I addressed these issues by drawing on Euclidean distanc
 
 Previous work, including that by Laing [UR], Kalinowski [in prep - CHECK] and others [refs], uses network growth algorithms to test whether learning can be predicted based on the words that infants already know or produce. If infants' early word acquisition and production is as systematic as previous work suggests, then we would expect that it is possible to predict learning based on the known words in the infant's existing lexicon. Methods and results differ between these accounts, as outlined in part above, but Laing, Kalinowski and Siew and Vitevitch all show that infants' and children's word learning can be predicted based on how likely new words are to connect to existing words in the lexicon (i.e. new words are more likely to be similar to known words). Laing [UR] compared this across adult target forms and infants' actual productions to find that infants' early words are phonologically more similar to one another than we would expect from analysing the target forms alone. That is, phonological systematicity may drive lexical selection, but drives production even more so.
 
-These network growth models present a compelling computational approach to observing systematicity in the developing lexicon, but they don't give us a clear view into the extent to which early-acquired forms are produced in a phonologically similar way. That is, network growth models analyse connectivity (are two words similar, yes or no? if yes then they are connected in the network), rather than phonological distance (*how* similar are two words in the network?). This study expands on previous work, and builds on findings from Laing [UR] by analysing network graphs of infants' early lexicons. This provides an insight into the properties of the network, including how densely connected the network is, and the phonological distance between items in the network. Following Laing, this paper will analyse infants' actual productions as well as the adult target forms, to test the extent to which systematicity is present in prodution, in terms of both the words infants select in early development (Target forms), and how they produce them (Actual forms). 
+These network growth models present a compelling computational approach to observing systematicity in the developing lexicon, but they don't give us a clear view into the extent to which early-acquired forms are produced in a phonologically similar way. That is, network growth models analyse connectivity (are two words similar, yes or no? if yes then they are connected in the network), rather than phonological distance (*how* similar are two words in the network?). This study expands on previous work, and builds on findings from Laing [UR] by analysing network graphs of infants' early lexicons. This provides an insight into the properties of the network, including how densely connected the network is, and the phonological distance between items in the network. It also allows us to make predictions about network properties over time that reflect word selection and adaptation. Following Laing [UR], this paper will analyse infants' actual productions as well as the adult target forms, to test the extent to which systematicity is present in production, in terms of both the words infants select in early development (Target forms), and how they produce them (Actual forms). 
 
-- I probably want something about selected and adapted words
+Specifically, this paper addresses the following two questions:
+
+1. How systematic are early word productions, and (how) does this change over time?
+2. Are the phases of word selection and adaptation - characterised by target-like and non-target-like productions, respectively - identifiable in the dataset?
+
+Network graphs will be generated using the *igraph()* package [@R-igraph] in R [@R-base]. To address the first question, properties of the graphs will be analysed to determine 1) how closely connected individual words are to one another; 2) how dense the overall distribution of words is in the network; and 3) how this changes over time. Following Vihman's work, and findings presented by Laing [UR], it is expected that the early vocabulary will become increasingly systematic over time. Following predictions made in previous work but not supported in the analyses, the analysis of network properties in this analysis is expected to show a decrease in systematicity later on in the data, as infants move towards target-like (and thus phonologically variable) production in the third year. To address the second question, network graphs of infants' actual productions will be compared with those of the target form, to trace the 'target-likeness' of individual productions, and how this changes over time. Following Vihman once again, early word selection would be reflected in early similarities between Actual and Target network properties, as target forms are selected to match the structures and segments that infants are able to produce. Over time, Actual and Target forms are expected to diverge, such that Actual forms show more systematicity in the data than Target forms. Again, by the third year, we may see the two come back together as novel words are produced in an increasingly target-like way. Variables used to test these predictions are outlined in detail below.
+
 
 ## Methods
 
@@ -43,11 +104,164 @@ adapt this bit to fit with the data used in this analysis (and re-write):
 
 # Network graphs
 
-The prepared data was then used to generate a series of network graphs for each infant using the *igraph()* package in R [@R-igraph]. One network was generated per month, for each month in the dataset, and these grew cumulatively such that the network at time-point *n*+1 included all words at time-point *n*, plus all additional words produced for the first time at *n*+1.  
+The prepared data was then used to generate a series of network graphs for each infant (for both Target and Actual data) using the *igraph()* package in R [@R-igraph]. One network was generated per month, for each month in the dataset, and these grew cumulatively such that the network at time-point *n*+1 included all words at time-point *n*, plus all additional words produced for the first time at *n*+1.  
 
 The *igraph()* package generates graphs that include all nodes (whether or not they are connected to other nodes), and accounts for the distance between nodes, as well as the clustering of nodes in graphical space. 
 
-PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To compare the network structure of Target versus Actual data, mean path length and clustering coefficient values were generated for both the Target and Actual networks, using the *igraph()* package in R [@R-igraph], as outlined below. 
+Two key variables will be explored through an analysis of network graphs: *mean path length* and *clustering coefficient*. Path length is a measure of distance between nodes, and mean path length indexes the average connectivity (of all connected nodes) within a network; by this measure, we would expect that systematicity in early phonological development would be reflected in low mean path length. Clustering coefficient is an indication of network density: a higher density of nodes in the network indicates denser clusters of similar forms; again, this is what we would expect to see in a network of early phonological development. See Goldbeck [-@golbeck_analyzing_2013] for a full overview of network structures and measures.
+
+
+
+## Results
+
+1. How systematic are early word productions, and (how) does this change over time?
+
+
+
+
+```{r network graph model comparisons, message=FALSE, warning=FALSE, include=FALSE}
+
+
+# Mean path length
+
+global_pathlength_model <- lmerTest::lmer(path_length ~ data_type + age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+#summary(global_pathlength_model)
+
+global_pathlength_model_null <- lmerTest::lmer(path_length ~ age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+
+pathlength <- anova(global_pathlength_model, global_pathlength_model_null)
+
+pathlength_df <- pathlength$Df[2]
+pathlength_chisq <- pathlength$Chisq[2]
+pathlength_p.value <- pathlength$`Pr(>Chisq)`[2]
+
+# Clustering coefficient
+
+global_clust_model <- lmerTest::lmer(clust_coef_avg ~ data_type + age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+#summary(global_clust_model)
+
+global_clust_model_null <- lmerTest::lmer(clust_coef_avg ~ age + corpus + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type %in% c("target", "actual")
+                                                           ),
+                                       REML=FALSE)
+
+clustcoef <- anova(global_clust_model, global_clust_model_null)
+
+clustcoef_df <- clustcoef$Df[2]
+clustcoef_chisq <- clustcoef$Chisq[2]
+clustcoef_p.value <- clustcoef$`Pr(>Chisq)`[2]
+
+```
+
+```{r network graphs model outputs, include=FALSE}
+
+table.model.output <- rbind(pathlength, clustcoef) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Variable = ifelse(Model == "global_pathlength_model", "Path Length", "Clustering Coefficient"),
+             p=scales::pvalue(p)) %>%
+  select(Variable, `Df`, `Chisq`, `p`)
+
+pathlength.summary <- summary(global_pathlength_model)
+
+pathlength.summary_tab <- pathlength.summary$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Data type" = "Data typetarget",
+                             "Corpus" = "CorpusFrench")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+clustcoef.summary <- summary(global_clust_model)
+
+clustcoef.summary_tab <- clustcoef.summary$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  dplyr::select(beta, SE, t, p)
+
+network.model.summary <- cbind(pathlength.summary_tab, clustcoef.summary_tab)
+
+rownames(network.model.summary) <- NULL
+
+PL_beta <- (subset(pathlength.summary_tab, Effect == "Data type")$beta)*100
+
+```
+
+Mean path length and clustering coefficient were calculated for each child's monthly networks. Target and Actual data was then compared using linear mixed-effects regression. Mean path length and clustering coefficient were included as dependent variables in two individual models, with Data type (Actual vs. Target), age and corpus as fixed effects and subject as a random effect with a by-subject random slope for the effect of age. Nested model comparisons showed that data type significantly predicted the mean path length within a network ($\chi^2 (`r pathlength_df`)$=`r pathlength_chisq`, *p*`r printp(pathlength_p.value)`) but not clustering coefficient ($\chi^2 (`r clustcoef_df`)$=`r clustcoef_chisq`, *p*=`r printp(clustcoef_p.value)`); mean path length was  `r PL_beta`% higher in Target compared with Actual data. See Table \@ref(tab:table-network-model-outputs) and Figures \@ref(fig:figure-path-length) and \@ref(fig:figure-clust-coef).
+
+```{r table-network-model-outputs, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear mixed effects regression models testing the effect of Data type (Actual vs. Target, Actual as baseline) on mean path length and clustering coefficient as dependent variables, with corpus (English vs. French) and Age as additional fixed effects and subject as a random effect. By-subject random slopes were included for the effect of Age."
+knitr::kable(network.model.summary, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=1, "Mean Path Length"=4, "Clustering Coefficient"=4)) %>%
+  kable_styling()
+```
+
+
+```{r figure-path-length, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_plot)
+cap <- sprintf("Change in mean path length over time, in Actual compared with Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+```{r figure-clust-coef, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(clust_coef_plot)
+cap <- sprintf("Change in average clustering coefficient over time, in Actual compared with Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```title: "OLD"
+output: pdf_document
+date: "2023-03-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 
  
 
