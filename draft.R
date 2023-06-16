@@ -1,3 +1,39 @@
+# LMERs
+
+global_pathlength_A_null <- lmerTest::lmer(path_length ~ corpus + numNodes + (1+age|Speaker),
+                                           data=subset(SWD_red,
+                                                       data_type == "actual")
+                                           ,
+                                           REML=FALSE)
+
+pathlength_A <- anova(global_pathlength_A, global_pathlength_A_null) # not significant
+
+pathlength_A_df <- pathlength_A$Df[2]
+pathlength_A_chisq <- pathlength_A$Chisq[2]
+pathlength_A_p.value <- pathlength_A$`Pr(>Chisq)`[2]
+
+# Clustering coefficient
+
+global_clust_model <- lmerTest::lmer(clust_coef_avg ~ age + corpus + numNodes + (1+age|Speaker),
+                                     data=subset(SWD_red,
+                                                 data_type == "actual"
+                                     ),
+                                     REML=FALSE)
+#summary(global_clust_model)
+
+global_clust_model_null <- lmerTest::lmer(clust_coef_avg ~ corpus + numNodes + (1+age|Speaker),
+                                          data=subset(SWD_red,
+                                                      data_type == "actual"
+                                          ),
+                                          REML=FALSE)
+
+clustcoef <- anova(global_clust_model, global_clust_model_null)
+
+clustcoef_df <- clustcoef$Df[2]
+clustcoef_chisq <- clustcoef$Chisq[2]
+clustcoef_p.value <- clustcoef$`Pr(>Chisq)`[2]
+
+
 # GAMMs (don't show anything interesting so likely will not use)
 
 ```{r GAMM prep, echo=F, message=FALSE, warning=FALSE, comment=F}
@@ -17,8 +53,10 @@ SWD_red$start.event <- SWD_red$session_ordinal == 1
 
 MPL.gamm.base_A <- bam(path_length ~ 
                          corpus +
-                         s(age, bs = "cr") +                       
+                         s(age, bs = "cr") +  
+                         s(numNodes, bs = "cr") +  
                          s(age, by=Speaker, bs="cr") +
+                        # s(numNodes, by=Speaker, bs="cr") +
                          s(age, by=corpus, bs="cr"),
                        dat=SWD_actual, method="ML")
 
@@ -26,8 +64,10 @@ rA <- start_value_rho(MPL.gamm.base_A)
 
 MPL.gamm.1_A <- bam(path_length ~ 
                       corpus +
-                      s(age, bs = "cr") + 
+                     # s(age, bs = "cr") +
+                      s(numNodes, bs = "cr") + 
                       s(age, corpus, bs="fs", m=1, k=2) +
+                     # s(numNodes, Speaker, , m=1, k=9) +
                       s(age, Speaker, bs="fs", m=1, k=9),  
                     data = SWD_actual, method = "ML", 
                     rho=rA, AR.start=SWD_actual$start.event)

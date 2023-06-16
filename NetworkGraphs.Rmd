@@ -120,24 +120,82 @@ PAT-like networks should exhibit properties of small-world network growth, namel
 
 1. How systematic are early word productions, and (how) does this change over time?
 
+```{r graphs - MPL}
+
+ggplot(subset(SWD_red, data_type == "actual"),
+       mapping = aes(x = age, y = path_length)) +
+  geom_smooth() +
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type == "target"),
+       mapping = aes(x = age, y = path_length)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type %in% c("target", "actual")),
+       mapping = aes(x = age, y = path_length, colour = data_type)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type %in% c("target", "actual")),
+       mapping = aes(x = age, y = clust_coef_avg, colour = data_type)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
+
+```
+
 ```{r network graph model comparisons - actual, message=FALSE, warning=FALSE, include=FALSE}
 
 # Mean path length
 
-global_pathlength_A <- lmerTest::lmer(path_length ~ age + corpus + (1+age|Speaker),
+global_pathlength_A <- lm(path_length ~ age + corpus + numNodes,
                                              data=subset(SWD_red,
-                                                           data_type == "actual")
+                                                           data_type == "actual"))
+output.globalpathlength_A <- summary(global_pathlength_A)
+
+global_pathlength_T <- lm(path_length ~ age + corpus + numNodes,
+                                             data=subset(SWD_red,
+                                                           data_type == "target"))
+output.globalpathlength_T <- summary(global_pathlength_T)
+
+# Mean path length
+
+global_pathlength_A <- lm(path_length ~ age + corpus + numNodes,
+                                             data=subset(SWD_red,
+                                                           data_type == "actual"))
+output.globalpathlength_A <- summary(global_pathlength_A)
+
+global_pathlength_T <- lm(path_length ~ age + corpus + numNodes,
+                                             data=subset(SWD_red,
+                                                           data_type == "target"))
+output.globalpathlength_T <- summary(global_pathlength_T)
+
+
+
+```
+
+```{r network graph model comparisons - target, message=FALSE, warning=FALSE, include=FALSE}
+
+# Mean path length
+
+global_pathlength_T <- lmerTest::lmer(path_length ~ age + corpus + numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                           data_type == "target")
                                                            ,
                                        REML=FALSE)
-#summary(global_pathlength_A)
+#summary(global_pathlength_T)
 
-global_pathlength_A_null <- lmerTest::lmer(path_length ~ corpus + (1+age|Speaker),
+global_pathlength_T_null <- lmerTest::lmer(path_length ~ corpus + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
-                                                           data_type == "actual")
+                                                           data_type == "target")
                                                            ,
                                        REML=FALSE)
 
-pathlength_A <- anova(global_pathlength_A, global_pathlength_A_null)
+pathlength_T <- anova(global_pathlength_T, global_pathlength_T_null) # not significant
 
 pathlength_A_df <- pathlength_A$Df[2]
 pathlength_A_chisq <- pathlength_A$Chisq[2]
@@ -145,16 +203,16 @@ pathlength_A_p.value <- pathlength_A$`Pr(>Chisq)`[2]
 
 # Clustering coefficient
 
-global_clust_model <- lmerTest::lmer(clust_coef_avg ~ data_type + age + corpus + (1+age|Speaker),
+global_clust_model <- lmerTest::lmer(clust_coef_avg ~ age + corpus + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
-                                                           data_type %in% c("target", "actual")
+                                                           data_type == "actual"
                                                            ),
                                        REML=FALSE)
 #summary(global_clust_model)
 
-global_clust_model_null <- lmerTest::lmer(clust_coef_avg ~ age + corpus + (1+age|Speaker),
+global_clust_model_null <- lmerTest::lmer(clust_coef_avg ~ corpus + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
-                                                           data_type %in% c("target", "actual")
+                                                           data_type == "actual"
                                                            ),
                                        REML=FALSE)
 
