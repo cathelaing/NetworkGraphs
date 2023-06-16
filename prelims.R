@@ -20,6 +20,9 @@ library(ggraph)
 library(data.table)
 library(linguisticsdown)
 library(igraph)
+library(mgcv) 
+library(itsadug)
+source("gamm_hacks.r")
 
 # add this to prep files eventually
 
