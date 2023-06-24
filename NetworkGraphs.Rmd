@@ -116,9 +116,611 @@ Two key variables will be explored through an analysis of network graphs: *mean 
 
 PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To test this, mean path length and clustering coefficient values were generated for both the Target and Actual networks, as outlined below. Data were compared to the growth of a simulated small-world network, known as a Watts-Strogatz network [@watts_collective_1998]; if no statistical differences are observed between the real and simulated data over the trajectory of development, then a PAT-like model of network growth may be present in the data. The real data were also compared to a similarly-sized but randomly-generated network known as a Erdős–Rényi model. If the real network grows in a systematic way, then we would expect the real data to differ significantly from the randomly-generated Erdős–Rényi network. To run these analyses, network graphs were computed for each child at each month in the dataset, such that the network grew cumulatively over time - all words produced in the given month and all previous months were included in each month's network. Mean path length and clustering coefficient were calculated for each graph, and then compared to the two kinds of simulated data, matched for network size: a Watts-Strogatz network (prototypical PAT-like network) and an Erdős–Rényi network (random network).
 
+MPL = global property of network (typical distance between 2 nodes in the network)
+CC = locall property of network (clustering of a typical neighbourhood within the network)
+
+Watts & Strogatz, 1998
+
+### Simulated networks
+PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To test this, mean path length and clustering coefficient values were generated for both the Target and Actual networks, as outlined below. Data were compared to the growth of a simulated small-world network, known as a Watts-Strogatz network [@watts_collective_1998]; if no statistical differences are observed between the real and simulated data over the trajectory of development, then a PAT-like model of network growth may be present in the data. The real data were also compared to a similarly-sized but randomly-generated network known as a Erdős–Rényi model. If the real network grows in a systematic way, then we would expect the real data to differ significantly from the randomly-generated Erdős–Rényi network. To run these analyses, network graphs were computed for each child at each month in the dataset, such that the network grew cumulatively over time - all words produced in the given month and all previous months were included in each month's network. Mean path length and clustering coefficient were calculated for each graph, and then compared to the two kinds of simulated data, matched for network size: a Watts-Strogatz network (prototypical PAT-like network) and an Erdős–Rényi network (random network). Watts-Strogatz simulations match both the mean degree and the network size of the network in each month; Erdős–Rényi networks require only network size to be specified.
+
 # Results
 
-1. How systematic are early word productions, and (how) does this change over time?
+## How systematic are early word productions, and (how) does this change over time?
+
+- we already know that network growth algoritms can predict learning due to systematicity. Looking specifically at properites of network graphs, we would expect to see shorter MPL and higher CC in infants' actual productions compared with model graphs. Following Laing (under review), the early vocabulary is expected to become more systematic with age. In the case of this analysis, we expect to see shorter MPL over time, and higher CC. 
+
+to test RQ1, network graphs were compared to simulated small world and random networks of equivalent size to determine whether the data (the *Real* network) differed from the *Simulated* networks. Recall that systematic network growth, as predicted here, should reflect a small-world network growth structure. Two key components of small-world networks were compared: mean path length and clustering coefficient. Small-world networks typically have a low mean path length and a high clustering coefficient; for both measures we would expect the Real data to differ significantly from the Simulated Erdős–Rényi (random) network, and to see no statistical difference between the Real network and the Simulated Watts-Strogatz (small-world) network. The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as dependent variables, respectively, each with data type (Real vs. small-world vs. random), corpus (English vs. French) and age as fixed effects, and subject as a random effect with a by-subject random slope for the effect of age. Initial model comparisons showed that including network size to the model improved fit for the clustering coefficient data, but not for mean path length, so an age*network size interaction was included in this model only. 
+
+### Mean Path Length
+Mean path length was calculated for each child's monthly networks using the *igraph()* package in R [@R-igraph]. Equivalent-sized Watts-Strogatz and Erdős–Rényi networks were generated for comparison.  
+
+```{r mean path length, message=FALSE, warning=FALSE, include=FALSE}
+
+MPL <- lmerTest::lmer(path_length ~ data_type + corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+#summary(MPL)
+
+MPL.0 <- lmerTest::lmer(path_length ~ corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+MPL_anova <- anova(MPL, MPL.0)
+
+MPL_df <- MPL_anova$Df[2]
+MPL_chisq <- MPL_anova$Chisq[2]
+MPL_p.value <- MPL_anova$`Pr(>Chisq)`[2]
+
+
+```
+Nested model comparisons revealed a significant effect for data type on mean path length. See Table XX. As shown in Table XX, the Real data had a significantly lower mean path length than the random Simulated data, as predicted. However, the Real data also differed significantly from the small-world Simulated data, which, contrary to predictions, had a significantly shorter mean path length than that of the Real data. Model outputs revealed no effect for corpus or age on the data. 
+
+
+```{r clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+CC <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+#summary(CC)
+
+CC.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+CC_anova <- anova(CC, CC.0)
+
+CC_df <- CC_anova$Df[2]
+CC_chisq <- CC_anova$Chisq[2]
+CC_p.value <- CC_anova$`Pr(>Chisq)`[2]
+
+```
+
+The same patterns were found when clustering coefficient was tested in the model. The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, but network size, and its interaction with age, were found to be significant predictors of average clustering coefficient: clustering coefficient values decreased as network size increased, suggesting that systematicity became stronger in the data over time. The age * network size interaction was also found to be significant, such that with each additional month of age, the effect of network size on clustering coefficient decreased by XX%.
+
+The unexpected differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a small-world network. To further interrogate systematicity within the data, the Real (Actual) data was compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and network properties within a phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the dataset. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect. Initial model comparisons supported the inclusion of an age * network size interaction in both sets of models.
+
+```{r data type - mean path length, message=FALSE, warning=FALSE, include=FALSE}
+
+MPL.DT <- lmerTest::lmer(path_length ~ data_type + corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+#summary(MPL.DT)
+
+MPL.DT.0 <- lmerTest::lmer(path_length ~ corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+MPL.DT_anova <- anova(MPL.DT, MPL.DT.0)
+
+MPL.DT_df <- MPL.DT_anova$Df[2]
+MPL.DT_chisq <- MPL.DT_anova$Chisq[2]
+MPL.DT_p.value <- MPL.DT_anova$`Pr(>Chisq)`[2]
+
+```
+There was a significant effect for data type on mean path length. Model outputs revealed that Target data had a significantly higher mean path length than Actual data. See Table XX. This time there was also a significant effect for corpus; French data had a higher mean path length than English data. Both age and network size significantly affected mean path length, which increased as age/network size increased. The age * network size interaction was also significant, but this time the effect was negative, such that the effect of network size on mean path length decreased by XX% with each additional month of age. 
+
+```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+CC.DT <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+#summary(CC.DT)
+
+CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+CC.DT_anova <- anova(CC.DT, CC.DT.0)
+
+CC.DT_df <- CC.DT_anova$Df[2]
+CC.DT_chisq <- CC.DT_anova$Chisq[2]
+CC.DT_p.value <- CC.DT_anova$`Pr(>Chisq)`[2]
+
+
+```
+The effect of data type on clustering coefficient was also significant. Mean clustering coefficient was significantly lower in Target vs. Actual data. It was also lower in French compared with English data. Mean clustering coefficient decreased as age and network size increased (indicating increased systematicity over time); the age * network size interaction was significant, such that the effect of network size on clustering coefficient decreased by XX% with each additional month of age. 
+
+```{r model outputs, include=FALSE}
+
+table.model.output <- rbind(MPL_anova, MPL.DT_anova, CC_anova, CC.DT_anova) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Model=fct_recode(Model,
+                           "Mean Path Length (Real vs. Simulated)"="MPL",
+                            "Clustering Coefficient (Real vs. Simulated)"="CC",
+                            "Mean Path Length (Actual vs. Target)"="MPL.DT",
+                            "Clustering Coefficient (Actual vs. Target)"="CC.DT"),
+             p=scales::pvalue(p)) %>%
+  dplyr::select(Model, `Df`, `Chisq`, `p`)
+
+model.summary.MPL <- summary(MPL)
+
+MPL_tab <- model.summary.MPL$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+
+MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
+
+
+
+model.summary.CC <- summary(CC)
+
+CC_tab <- model.summary.CC$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes",
+                             "Age * Network size" = "Age $\\times$ NumNodes")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+
+model.summary.MPL.DT <- summary(MPL.DT)
+
+MPL.DT_tab <- model.summary.MPL.DT$coefficients %>%
+  as.data.frame %>%
+    rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Actual vs. Target" = "Data typetarget",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes",
+                             "Age * Network size" = "Age $\\times$ NumNodes")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+model.summary.CC.DT <- summary(CC.DT)
+
+CC.DT_tab <- model.summary.CC.DT$coefficients %>%
+  as.data.frame %>%
+    rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Actual vs. Target" = "Data typetarget",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes",
+                             "Age * Network size" = "Age $\\times$ NumNodes"))%>%
+  dplyr::select(Effect, beta, SE, t, p)
+
+
+real_v_sim <- cbind(MPL_tab, CC_tab)
+actual_v_target <- cbind(MPL.DT_tab, CC.DT_tab)
+
+actual_v_target[6] <- NULL
+real_v_sim[6] <- NULL
+
+
+```
+
+```{r table-model-output, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from nested model comparisons testing the effect of data type (Real vs. Simulated and Actual vs. Target on mean path length and clustering coefficient."
+knitr::kable(table.model.output, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  kable_styling()%>%
+  row_spec(4, hline_after=T)
+
+```
+
+```{r table-real-sim, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient."
+knitr::kable(real_v_sim, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
+    kable_styling()#%>%
+  # row_spec(1, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(2, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(3, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(4, hline_after=T) %>%
+  # row_spec(5, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(6, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(7, extra_latex_after = "\\cline{2-10}")
+```
+
+```{r table-actual-target, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient."
+knitr::kable(actual_v_target, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
+    kable_styling()#%>%
+  # row_spec(1, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(2, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(3, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(4, hline_after=T) %>%
+  # row_spec(5, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(6, extra_latex_after = "\\cline{2-10}") %>%
+  # row_spec(7, extra_latex_after = "\\cline{2-10}")
+```
+
+
+
+```{r Figure-path-length, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_all)
+cap <- sprintf("Change in mean path length over time, in Real data (Actual or Target) compared with Watts-Strogatz and Erdős–Rényi simulations representing small-world and random network growth properties, respectively. Coloured lines represent Data type; grey bands represent 95%% CIs.")
+```
+
+```{r Figure-clust-coef, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+#par(cex=1.2)
+plot(clust_coef_all)
+cap <- sprintf("Change in mean clustering coefficient over time, in Real data (Actual or Target) compared with Watts-Strogatz and Erdős–Rényi simulations representing small-world and random network growth properties, respectively. Coloured lines represent Data type; grey bands represent 95%% CIs.")
+```
+
+## Clustering Coefficient
+
+Similarly, average clustering coefficient was calculated for each child's monthly networks using the *igraph()* package, for both the Real and Simulated data. As above, mixed effects linear regression models were generated for each corpus; the same model structure was used, but this time with average clustering coefficient as the dependent variable.
+
+```{r small world properties - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+# Providence
+
+# Actual
+
+global_clustcoef_model_A_P <- lmerTest::lmer(clust_coef_avg ~ data_type * age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "English" &
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+#summary(global_clustcoef_model_A_P)
+
+global_clustcoef_model_A_P_null <- lmerTest::lmer(clust_coef_avg ~ age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "English"  &
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+clustcoef_WS_A_P <- anova(global_clustcoef_model_A_P, global_clustcoef_model_A_P_null)
+
+# Target
+
+global_clustcoef_model_T_P <- lmerTest::lmer(clust_coef_avg ~ data_type * age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "English" &
+                                                             data_type %in% c("target", "WS_target", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+global_clustcoef_model_T_P_null <- lmerTest::lmer(clust_coef_avg ~ age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "English"  &
+                                                             data_type %in% c("target", "WS_target", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+clustcoef_WS_T_P <- anova(global_clustcoef_model_T_P, global_clustcoef_model_T_P_null)
+
+# Lyon
+
+# Actual
+
+global_clustcoef_model_A_L <- lmer(clust_coef_avg ~ data_type * age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "French" &
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+#summary(global_clustcoef_model_A_L)
+
+global_clustcoef_model_A_L_null <- lmer(clust_coef_avg ~ age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "French" &
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+clustcoef_WS_A_L <- anova(global_clustcoef_model_A_L, global_clustcoef_model_A_L_null)
+
+# Target
+
+global_clustcoef_model_T_L <- lmer(clust_coef_avg ~ data_type * age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "French" &
+                                                             data_type %in% c("target", "WS_target", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+#summary(global_clustcoef_model_A_L)
+
+global_clustcoef_model_T_L_null <- lmer(clust_coef_avg ~ age + (1|Speaker),
+                                             data=subset(SWD_red,
+                                                           corpus == "French" &
+                                                             data_type %in% c("target", "WS_target", "Erdos_Renyi")),
+                                       REML=FALSE)
+
+clustcoef_WS_T_L <- anova(global_clustcoef_model_T_L, global_clustcoef_model_T_L_null)
+
+```
+
+```{r Clustering coefficient model outputs, include=FALSE}
+
+table.CC.model.output<- rbind(clustcoef_WS_A_P, clustcoef_WS_T_P, clustcoef_WS_A_L, clustcoef_WS_T_L) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Corpus = ifelse(Model == "global_clustcoef_model_A_P", "English", " "),
+         Corpus = ifelse(Model == "global_clustcoef_model_A_L", "French", Corpus),
+         Model=fct_recode(Model,
+                           "Actual"="global_clustcoef_model_A_P",
+                            "Target"="global_clustcoef_model_T_P",
+                            "Actual"="global_clustcoef_model_A_L",
+                            "Target"="global_clustcoef_model_T_L"),
+             p=scales::pvalue(p)) %>%
+  rename(`Data type` = "Model") %>%
+  select(Corpus, `Data type`, `Df`, `Chisq`, `p`)
+
+model.summary.P_A_clustcoef <- summary(global_clustcoef_model_A_P)
+
+clustcoef_P_A_tab <- model.summary.P_A_clustcoef$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::prettify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Corpus = ifelse(Effect == "Intercept", "English", ""),
+        # `Data type` = ifelse(Effect == "Intercept", "Actual", ""),
+         Effect = fct_recode(Effect,
+                             "Watts-Strogatz comparison" = "Data typeWS actual",
+                             "Erdős–Rényi comparison" = "Data typeErdos Renyi")) %>%
+filter(Effect %in% c("Intercept", "Age", "Watts-Strogatz comparison", "Erdős–Rényi comparison")) %>%
+  slice(match(order, Effect)) %>%
+  select(Corpus, Effect, beta, SE, t, p)
+
+model.summary.P_T_clustcoef <- summary(global_clustcoef_model_T_P)
+
+clustcoef_P_T_tab <- model.summary.P_T_clustcoef$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::prettify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(#Corpus = ifelse(Effect == "Intercept", "English", ""),
+        # `Data type` = ifelse(Effect == "Intercept", "Target", ""),
+         Effect = fct_recode(Effect,
+                             "Watts-Strogatz comparison" = "Data typeWS target",
+                             "Erdős–Rényi comparison" = "Data typetarget")) %>%
+filter(Effect %in% c("Intercept", "Age", "Watts-Strogatz comparison", "Erdős–Rényi comparison")) %>%
+  slice(match(order, Effect)) %>%
+  dplyr::select(-Effect)
+
+model.summary.L_A_clustcoef <- summary(global_clustcoef_model_A_L)
+
+clustcoef_L_A_tab <- model.summary.L_A_clustcoef$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::prettify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Corpus = ifelse(Effect == "Intercept", "French", ""),
+       #  `Data type` = ifelse(Effect == "Intercept", "Actual", ""),
+         Effect = fct_recode(Effect,
+                             "Watts-Strogatz comparison" = "Data typeWS actual",
+                             "Erdős–Rényi comparison" = "Data typeErdos Renyi")) %>%
+filter(Effect %in% c("Intercept", "Age", "Watts-Strogatz comparison", "Erdős–Rényi comparison")) %>%
+  slice(match(order, Effect)) %>%
+  select(Corpus, Effect, beta, SE, t, p)
+
+model.summary.L_T_clustcoef <- summary(global_clustcoef_model_T_L)
+
+clustcoef_L_T_tab <- model.summary.L_T_clustcoef$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::prettify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(2, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(#Corpus = ifelse(Effect == "Intercept", "French", ""),
+        # `Data type` = ifelse(Effect == "Intercept", "Target", ""),
+          Effect = fct_recode(Effect,
+                             "Watts-Strogatz comparison" = "Data typeWS target",
+                             "Erdős–Rényi comparison" = "Data typetarget")) %>%
+filter(Effect %in% c("Intercept", "Age", "Watts-Strogatz comparison", "Erdős–Rényi comparison")) %>%
+  slice(match(order, Effect)) %>%
+  dplyr::select(-Effect)
+
+clustcoef_english <- cbind(clustcoef_P_A_tab, clustcoef_P_T_tab)
+clustcoef_french <- cbind(clustcoef_L_A_tab, clustcoef_L_T_tab)
+
+clustcoef.model.outputs <- rbind(clustcoef_english, clustcoef_french)
+rownames(clustcoef.model.outputs) <- NULL
+
+```
+
+Model outputs are shown in Table \@ref(tab:table-clustcoef-modeloutput). Again, across both corpora the Real (Actual and Target) data differed significantly from the random Erdős–Rényi network. However, this time only the Actual data in the English corpus showed no difference between the Real and the Simulated Watts-Strogatz data; in the French data, this was marginally significant. Again, this lends support (albeit partial in this case) to H3. See Figure \@ref(fig:Figure-clust-coef). 
+
+```{r table-clustcoef-modeloutput, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from nested model comparisons testing the effect of data type (Real vs. Watts-Strogatz vs. Erdős–Rényi) on clustering coefficient. English and French data, both Actual and Target."
+knitr::kable(table.CC.model.output, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  kable_styling()%>%
+  row_spec(9, hline_after=T)
+
+```
+
+```{r table-clustcoef, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear regression models testing comparisons of Real vs. Simulated data on clustering coefficient. English and French data, both Actual and Target."
+knitr::kable(clustcoef.model.outputs, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=2, "Actual"=4, "Target"=4)) %>%
+    kable_styling()%>%
+  row_spec(1, extra_latex_after = "\\cline{2-10}") %>%
+  row_spec(2, extra_latex_after = "\\cline{2-10}") %>%
+  row_spec(3, extra_latex_after = "\\cline{2-10}") %>%
+  row_spec(4, hline_after=T) %>%
+  row_spec(5, extra_latex_after = "\\cline{2-10}") %>%
+  row_spec(6, extra_latex_after = "\\cline{2-10}") %>%
+  row_spec(7, extra_latex_after = "\\cline{2-10}")
+```
+
+As shown in Figure \@ref(fig:plotted-smooth-MPL)
+
+```{r plotted-smooth-MPL, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE,results='hide',fig.keep='all'}
+
+path_length_plot
+cap <- sprintf("Smooth plot showing mean path length of the nine infants' networks over time, in both Actual (red) and Target (blue) forms. Shaded areas show 95%% confidence intervals, lines indicate mean trajectories over time.")
+```
+
+This is consistent in the clustering coefficient data, shown in Figure \@ref(fig:plotted-smooth-CC)
+
+```{r plotted-smooth-CC, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE,results='hide',fig.keep='all'}
+
+clust_coef_plot
+cap <- sprintf("Smooth plot showing mean clustering coefficient of the nine infants' networks over time, in both Actual (red) and Target (blue) forms. Shaded areas show 95%% confidence intervals, lines indicate mean trajectories over time.")
+```
+
+2. Is there evidence of word selection and adaptation in the dataset?
+
+- if we take actual=target as a proxy of word selection, and actual!=target as a proxy of adaptation, then we'd expect to see actual and target forms being more similar earlier on in development, and less similar later. Similarity == connectivity in the network, at varying degrees of E.
 
 ```{r graphs - MPL}
 
@@ -147,6 +749,12 @@ ggplot(subset(SWD_red, data_type %in% c("target", "actual")),
   theme_bw()
 
 ```
+2. 
+
+
+
+
+
 
 ```{r network graph model comparisons - actual, message=FALSE, warning=FALSE, include=FALSE}
 
