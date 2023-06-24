@@ -46,7 +46,6 @@ SWD_target$start.event <- SWD_target$session_ordinal == 1
 
 SWD_red$start.event <- SWD_red$session_ordinal == 1 
 
-
 globalthresholds$start.event <- globalthresholds$threshold == 0.01
 
 # CREATE DUMMY VARIABLE FOR ACTUAL VS TARGET  
@@ -71,7 +70,7 @@ gam.test2 <- bam(estimate ~ dataO + s(threshold) + s(threshold, by=dataO), data=
 summary(gam.test2)
 
 plot(gam.test2, select=2, shade=TRUE)
-plot_diff(gam.test2, view="threshold", comp=list(dataO=c("actual","target")),
+plot_diff(gam.test2, view="threshold", comp=list(dataO=c("target","actual")),
           # main = "Figure 3",
           # ylab = "Est. difference in scaled PAT values",
           # xlab = "Age (months)",
@@ -122,7 +121,55 @@ plot_diff(corr.gamm.1, view="threshold", comp=list(data_type=c("actual","target"
           hide.label = TRUE)
 
 
-```
+meank.gamm.base <- bam(mean_k ~ 
+                          data_type +
+                          corpus +
+                            s(numNodes, bs = "cr")  +
+                          s(age, bs = "cr") +                       
+                          s(age, by=Speaker, bs="cr") +
+                          s(age, by=data_type, bs="cr") +
+                          s(age, by=corpus, bs="cr"),
+                        dat=subset(SWD_red, data_type %in% c("actual", "target")), method="ML")
+
+rmeank <- start_value_rho(meank.gamm.base) 
+
+meank.gamm.1 <- bam(mean_k ~ 
+                      data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") +            
+                       s(age, corpus, bs="fs", m=1, k=2) +
+                       s(age, data_type, bs="fs", m=1, k=2) +
+                       s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                     rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.gamm.0 <- bam(mean_k ~ 
+                      #data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") +            
+                      s(age, corpus, bs="fs", m=1, k=2) +
+                      #s(age, data_type, bs="fs", m=1, k=2) +
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                    rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.diff <- compareML(meank.gamm.1, meank.gamm.0)
+meank.diff.prep <- meank.diff$table
+
+meank.diff_summ <- summary(meank.diff.prep)
+
+
+plot_diff(meank.gamm.1, view="age", comp=list(data_type=c("target","actual")),
+          # main = "Figure 3",
+          # ylab = "Est. difference in scaled PAT values",
+          xlab = "Age (months)",
+          xlim = c(10,30),
+          hide.label = TRUE)
+
+
+
 
 ```{r GAMM age target MPL, message=FALSE, warning=FALSE, include=FALSE}
 

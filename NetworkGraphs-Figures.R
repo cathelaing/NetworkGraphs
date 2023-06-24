@@ -22,7 +22,7 @@ path_length_plot <- ggplot(data=subset(SWD_red,
   theme(text = element_text(size = 20),
         legend.position = "bottom")
 
-clust_coef_plot <- ggplot(data=subset(SWD_red,
+clust_coef_plot_DT <- ggplot(data=subset(SWD_red,
                                       data_type %in% c("target", "actual")),
                           aes(x = age, y = clust_coef_avg)) +
   geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
