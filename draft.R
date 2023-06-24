@@ -47,43 +47,80 @@ SWD_target$start.event <- SWD_target$session_ordinal == 1
 SWD_red$start.event <- SWD_red$session_ordinal == 1 
 
 
+globalthresholds$start.event <- globalthresholds$threshold == 0.01
+
+# CREATE DUMMY VARIABLE FOR ACTUAL VS TARGET  
+
+globalthresholds$IsActual <- (globalthresholds$data_type == "actual")*1
+
 ```
 
-```{r GAMM age actual MPL, message=FALSE, warning=FALSE, include=FALSE}
+```{r GAMM thresholds corr, message=FALSE, warning=FALSE, include=FALSE}
 
-MPL.gamm.base_A <- bam(path_length ~ 
-                         corpus +
-                         s(age, bs = "cr") +  
-                         s(numNodes, bs = "cr") +  
-                         s(age, by=Speaker, bs="cr") +
-                        # s(numNodes, by=Speaker, bs="cr") +
-                         s(age, by=corpus, bs="cr"),
-                       dat=SWD_actual, method="ML")
+gam.test <- bam(estimate ~ s(threshold) + s(threshold, by=IsActual), data=subset(globalthresholds, corpus == "English"))
 
-rA <- start_value_rho(MPL.gamm.base_A) 
+summary(gam.test)
 
-MPL.gamm.1_A <- bam(path_length ~ 
-                      corpus +
-                     # s(age, bs = "cr") +
-                      s(numNodes, bs = "cr") + 
-                      s(age, corpus, bs="fs", m=1, k=2) +
-                     # s(numNodes, Speaker, , m=1, k=9) +
-                      s(age, Speaker, bs="fs", m=1, k=9),  
-                    data = SWD_actual, method = "ML", 
-                    rho=rA, AR.start=SWD_actual$start.event)
+plot(gam.test, select=2, shade=TRUE)
 
-MPL.gamm.0_A <- bam(path_length ~ 
-                      corpus +
-                      #s(age, bs = "cr") + 
-                      s(age, corpus, bs="fs", m=1, k=2) +
-                      s(age, Speaker, bs="fs", m=1, k=9),  
-                    data = SWD_actual, method = "ML", 
-                    rho=rA, AR.start=SWD_actual$start.event)
+globalthresholds$dataO <- as.ordered(globalthresholds$data_type) 
+contrasts(globalthresholds$dataO) <- "contr.treatment"
 
-MPL.gamm.actual <- compareML(MPL.gamm.1_A, MPL.gamm.0_A)
-MPL.gamm.A <- MPL.gamm.actual$table
+gam.test2 <- bam(estimate ~ dataO + s(threshold) + s(threshold, by=dataO), data=subset(globalthresholds, corpus == "English"))
 
-MPL.gamm.A_summ <- summary(MPL.gamm.A)
+summary(gam.test2)
+
+plot(gam.test2, select=2, shade=TRUE)
+plot_diff(gam.test2, view="threshold", comp=list(dataO=c("actual","target")),
+          # main = "Figure 3",
+          # ylab = "Est. difference in scaled PAT values",
+          # xlab = "Age (months)",
+          # xlim = c(10,30),
+          hide.label = TRUE)
+
+
+
+
+corr.gamm.base <- bam(estimate ~ 
+                         #corpus +
+                        data_type +
+                         s(threshold, bs = "cr") +  
+                          #s(threshold, by=corpus, bs="cr") +
+                          s(threshold, by=data_type, bs="cr"),
+                       dat=subset(globalthresholds, corpus == "English"), method="ML")
+
+rho <- start_value_rho(corr.gamm.base) 
+
+corr.gamm.1 <- bam(estimate ~ 
+                     #corpus +
+                     data_type +
+                     s(threshold, bs = "cr") +
+                      #s(threshold, corpus, bs="fs", m=1, k=9) +
+                      s(threshold, data_type, bs="fs", m=1, k=2),  
+                   dat=subset(globalthresholds, corpus == "English"), method = "ML", 
+                    rho=rho, AR.start=subset(globalthresholds, corpus == "English")$start.event)
+
+corr.gamm.0 <- bam(estimate ~ 
+                     #corpus +
+                     data_type +
+                     s(threshold, bs = "cr") +
+                     #s(threshold, corpus, bs="fs", m=1, k=9) +
+                     s(threshold, data_type, bs="fs", m=1, k=2),  
+                   dat=subset(globalthresholds, corpus == "English"), method = "ML", 
+                   rho=rho, AR.start=subset(globalthresholds, corpus == "English")$start.event)
+
+corr.compare <- compareML(corr.gamm.1, corr.gamm.0)
+compare1 <- corr.compare$table
+
+corr.compare_summ <- summary(compare1)
+
+plot_diff(corr.gamm.1, view="threshold", comp=list(data_type=c("actual","target")),
+          # main = "Figure 3",
+          # ylab = "Est. difference in scaled PAT values",
+          # xlab = "Age (months)",
+          # xlim = c(10,30),
+          hide.label = TRUE)
+
 
 ```
 

@@ -66,6 +66,19 @@ globalsmallworlddata <- rbind(globalsmallworlddata_P, globalsmallworlddata_L) %>
   mutate(data_type= as.factor(data_type)) %>%
   dplyr::select(-lowerCI, -upperCI, -lowerQuantile, -upperQuantile) # remove variables that aren't used
 
+globalthresholds_L <- feather::read_feather("Data/globalthresholds_corr_lyon.feather") %>% 
+  mutate(corpus = "French",
+         corpus = as.factor(corpus))
+
+globalthresholds_P <- feather::read_feather("Data/globalthresholds_corr_providence.feather") %>% 
+  mutate(corpus = "English",
+         corpus = as.factor(corpus))
+
+
+globalthresholds <- rbind(globalthresholds_L, globalthresholds_P) %>%
+  mutate(data_type= as.factor(data_type),
+         estimate = as.numeric(estimate))
+
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
   
