@@ -121,52 +121,43 @@ plot_diff(corr.gamm.1, view="threshold", comp=list(data_type=c("actual","target"
           hide.label = TRUE)
 
 
-meank.gamm.base <- bam(mean_k ~ 
-                          data_type +
-                          corpus +
-                            s(numNodes, bs = "cr")  +
-                          s(age, bs = "cr") +                       
-                          s(age, by=Speaker, bs="cr") +
-                          s(age, by=data_type, bs="cr") +
-                          s(age, by=corpus, bs="cr"),
-                        dat=subset(SWD_red, data_type %in% c("actual", "target")), method="ML")
+meank.gamm.base <- bam(distance ~ 
+                         corpus +
+                           s(session_ordinal, bs = "cr") +
+                           s(age, bs = "cr")  +                     
+                          s(age, by=Speaker, bs="cr"),
+                         # s(age, by=corpus, bs="cr"),
+                        dat=comparison_data, method="ML")
 
 rmeank <- start_value_rho(meank.gamm.base) 
 
-meank.gamm.1 <- bam(mean_k ~ 
-                      data_type +
+meank.gamm.1 <- bam(distance ~ 
                       corpus +
-                      s(numNodes, bs = "cr")  +
-                      s(age, bs = "cr") +            
-                       s(age, corpus, bs="fs", m=1, k=2) +
-                       s(age, data_type, bs="fs", m=1, k=2) +
-                       s(age, Speaker, bs="fs", m=1, k=9),  
-                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
-                     rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
-
-meank.gamm.0 <- bam(mean_k ~ 
-                      #data_type +
-                      corpus +
-                      s(numNodes, bs = "cr")  +
-                      s(age, bs = "cr") +            
-                      s(age, corpus, bs="fs", m=1, k=2) +
-                      #s(age, data_type, bs="fs", m=1, k=2) +
+                      s(session_ordinal, bs = "cr") +
+                      s(age, bs = "cr")  +   
                       s(age, Speaker, bs="fs", m=1, k=9),  
-                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
-                    rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+                    dat=comparison_data, method = "ML", 
+                     rho=rmeank, AR.start=comparison_data$session_ordinal == 1)
+
+
+
+meank.gamm.0 <- bam(distance ~ 
+                      corpus +
+                      #s(session_ordinal, bs = "cr") +
+                      s(age, bs = "cr")  +   
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=comparison_data, method = "ML", 
+                    rho=rmeank, AR.start=comparison_data$session_ordinal == 1)
 
 meank.diff <- compareML(meank.gamm.1, meank.gamm.0)
 meank.diff.prep <- meank.diff$table
 
 meank.diff_summ <- summary(meank.diff.prep)
 
-
-plot_diff(meank.gamm.1, view="age", comp=list(data_type=c("target","actual")),
-          # main = "Figure 3",
-          # ylab = "Est. difference in scaled PAT values",
-          xlab = "Age (months)",
-          xlim = c(10,30),
-          hide.label = TRUE)
+ggplot(comparison_data, aes(x = age, y = distance_z)) +
+  geom_point(shape = 1) +
+  geom_smooth() +
+  theme_bw()
 
 
 
