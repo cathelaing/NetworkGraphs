@@ -454,10 +454,84 @@ cap <- sprintf("Change in mean clustering coefficient over time, in Real data (A
 
 - if we take actual=target as a proxy of word selection, and actual!=target as a proxy of adaptation, then we'd expect to see actual and target forms being more similar earlier on in development, and less similar later. Similarity == connectivity in the network, at varying degrees of E.
 
-To test RQ2, the phonological distance between target and actual forms was taken as a proxy of word selection and adaptation. That is, if a word is produced in a target-like way (i.e. assumed to be selected[^1]), then the phonological distance between the Target form and the way it is produced (Actual) should be low. The opposite is likely true for adapted forms, as we expect, by definition, a non-target-like production and thus a higher distance between Target and Actual form. Following Vihman's [REF] framework, we would thus expect low distance been Actual and Target forms earlier on in development, and higher distance later. To test this, I drew on generalized additive models (GAMs) and generalized additive mixed effects models, since these allow the analysis of non-linear change over time, and can account for statistical differences between two non-linear trajectories of data that may differ in non-linear ways. 
+To test RQ2, the phonological distance between target and actual forms was taken as a proxy of word selection and adaptation. That is, if a word is produced in a target-like way (i.e. assumed to be selected[^1]), then the phonological distance between the Target form and the way it is produced (Actual) should be low. The opposite is likely true for adapted forms, as we expect, by definition, a non-target-like production and thus a higher distance between Target and Actual form. Following Vihman's [REF] framework, we would thus expect low distance been Actual and Target forms earlier on in development, and higher distance later. To test this, I drew on generalized additive models (GAMs) and generalized additive mixed effects models (GAMMs), since these allow the analysis of non-linear change over time, and can account for statistical differences between two non-linear trajectories of data that may differ in non-linear ways [REFs].
 
 [^1]: though note that, while a selected form is, by definition, target-like in phonological form, a target-like form isn't necessarily a selected form.
 
+First, generalised linear mixed effects models, or GAMMs, were used to examine connectivity of the infants' Actual and Target networks and how these changed over time. These were run using the *mgcv()* package in R [REF]. These models reveal the extent to which the two networks differ (or not) from one another, and how this changes non-linearly month-by-month. Fixed effects in the model can include parametric terms, as is typical in regression modelling, and also the inclusion of *smooth terms*, or non-linear fixed effects. Much like mixed-effects linear models, GAMMs can account for random effects in the data; in this case by-subject random effects were included through the addition of *random smooths* in the model.
+
+The model tested number of connections (*mean k*) as the dependent variable, working on the assumption that connectivity in the networks would be similar during periods of word selection, and would differ during periods of adaptation. Specifically, periods of adaptation should lead to higher connectivity in the Actual network than the Target network, since we expect productions to be more similar (and thus more well-connected) in Actual forms. Data type (Actual vs. Target) and corpus (English vs. French) were included as parametric terms, with Data type being the variable of interest. Network size and age were included as smooth terms, as well as by-subject and by-data type random smooths for the effect of age, which account for by-subject and by-data type differences in the data over time. 
+
+To account for the fact that adjacent values (i.e. connectivity at month *n* and month *n+1*) are likely correlated, GAMM modelling includes an autocorrelation parameter; see REFs for full details. Additionally, the start point for each infant’s data (i.e. their first recording session) was also indexed in the model. To test for an effect of data type, model comparisons were run using the
+*compareML()* function from the *itsadug()* package [REFs]: the full model including the effect of data type and the by-data type random smooth was compared to a model without these terms. Because model summaries for GAMM smooths may be non-conservative (Sóskuthy, 2017), smooth plots will be observed alongside any significant effects to determine relevant trends in the data.
+
+```{r GAMMs set up}
+
+SWD_red$start.event <- SWD_red$session_ordinal == 1 
+
+globalthresholds$start.event <- globalthresholds$threshold == 0.01
+
+# create dummy variable for actual vs. target 
+
+globalthresholds$IsActual <- (globalthresholds$data_type == "actual")*1
+
+```
+
+```{r GAMMs - mean k ~ data type}
+
+meank.gamm.base <- bam(mean_k ~ 
+                          data_type +
+                          corpus +
+                            s(numNodes, bs = "cr")  +
+                          s(age, bs = "cr") +                       
+                          s(age, by=Speaker, bs="cr"),
+                        dat=subset(SWD_red, data_type %in% c("actual", "target")), method="ML")
+
+rmeank <- start_value_rho(meank.gamm.base) 
+
+meank.gamm.1 <- bam(mean_k ~ 
+                      data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") + 
+                       s(age, data_type, bs="fs", m=1, k=2) + 
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                     rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.gamm.0 <- bam(mean_k ~ 
+                      #data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") +     
+                     # s(age, data_type, bs="fs", m=1, k=2) + 
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                    rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.diff <- compareML(meank.gamm.1, meank.gamm.0)
+meank.diff.prep <- meank.diff$table
+
+meank.diff_summ <- summary(meank.diff.prep)
+
+```
+
+Model comparisons revealed a significant effect for data type on connectivity in the networks over time. See Table XX. Figure \@ref(fig:difference-plot-mean-k) shows the difference between Actual and Target connectivity over the course of development. The red line indicates periods of significant difference, showing that Actual vs. Target connectivity was significantly different throughout the period of analysis. However, the narrower difference in the earlier period of analysis (months 10-15, when differences in Estimate values are closer to 0) suggests that, during the earlier period of analysis, Target forms are as well-connected as Actual forms, suggesting a period of early word selection. 
+
+CAN ALSO LOOK AT DISTANCE BETWEEN ACTUAL AND TARGET, SINCE i HAVE THIS DATA
+
+```{r difference-plot-mean-k, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE,results='hide',fig.keep='all'}
+plot_diff(meank.gamm.1, view="age", comp=list(data_type=c("target","actual")),
+          # main = "Figure 3",
+          # ylab = "Est. difference in scaled PAT values",
+          xlab = "Age (months)",
+          xlim = c(10,30),
+          hide.label = TRUE)
+
+cap <- sprintf("Difference smooth plot showing difference between connectivity (mean k) in Actual vs. Target forms from the GAMM model specified above. Shaded area shows 95%% confidence intervals, red line along x-axis indicates months in which
+the difference between Actual and Target forms was significant.")
+```
+ 
 ```{r graphs - MPL}
 
 ggplot(subset(SWD_red, data_type == "actual"),
