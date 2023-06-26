@@ -79,6 +79,18 @@ globalthresholds <- rbind(globalthresholds_L, globalthresholds_P) %>%
   mutate(data_type= as.factor(data_type),
          estimate = as.numeric(estimate))
 
+comparison_L <- read_csv("Data/comparison_data_Lyon.csv") %>% 
+  mutate(corpus = "French",
+         corpus = as.factor(corpus))
+
+comparison_P <- read_csv("Data/comparison_data_Providence.csv") %>% 
+  mutate(corpus = "English",
+         corpus = as.factor(corpus))
+
+comparison_data <- rbind(comparison_L, comparison_P) %>%
+  mutate(Speaker = as.factor(Speaker),
+         distance_z = scale(distance, center = T, scale = T))
+
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
   
