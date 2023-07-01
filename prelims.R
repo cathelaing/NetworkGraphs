@@ -89,7 +89,10 @@ comparison_P <- read_csv("Data/comparison_data_Providence.csv") %>%
 
 comparison_data <- rbind(comparison_L, comparison_P) %>%
   mutate(Speaker = as.factor(Speaker),
-         distance_z = scale(distance, center = T, scale = T))
+         distance_z = scale(distance, center = T, scale = T)) %>%
+  filter(distance < 25)
+
+comparison_summary <- comparison_data %>% group_by(Speaker, age, Gloss, corpus, session_ordinal) %>% summarise(dist_mean = mean(distance))
 
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)

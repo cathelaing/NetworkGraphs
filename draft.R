@@ -121,45 +121,41 @@ plot_diff(corr.gamm.1, view="threshold", comp=list(data_type=c("actual","target"
           hide.label = TRUE)
 
 
-meank.gamm.base <- bam(distance ~ 
+dist.gamm.base <- bam(dist_mean ~ 
                          corpus +
                            s(session_ordinal, bs = "cr") +
                            s(age, bs = "cr")  +                     
-                          s(age, by=Speaker, bs="cr"),
-                         # s(age, by=corpus, bs="cr"),
-                        dat=comparison_data, method="ML")
+                          s(session_ordinal, by=Speaker, bs="cr"),
+                        dat=comparison_summary, method="ML")
 
-rmeank <- start_value_rho(meank.gamm.base) 
+rdist <- start_value_rho(dist.gamm.base) 
 
-meank.gamm.1 <- bam(distance ~ 
+dist.gamm.1 <- bam(dist_mean ~ 
                       corpus +
                       s(session_ordinal, bs = "cr") +
                       s(age, bs = "cr")  +   
-                      s(age, Speaker, bs="fs", m=1, k=9),  
-                    dat=comparison_data, method = "ML", 
-                     rho=rmeank, AR.start=comparison_data$session_ordinal == 1)
+                      s(session_ordinal, Speaker, bs="fs", m=1, k=9),  
+                    dat=comparison_summary, method = "ML", 
+                     rho=rdist, AR.start=comparison_summary$session_ordinal == 1)
 
+dist.gamm.0 <- bam(dist_mean ~ 
+                     corpus +
+                     s(session_ordinal, bs = "cr"),
+                     #s(age, bs = "cr")  +   
+                     #s(age, Speaker, bs="fs", m=1, k=9),  
+                   dat=comparison_summary, method = "ML", 
+                   rho=rdist, AR.start=comparison_summary$session_ordinal == 1)
 
+dist.diff <- compareML(dist.gamm.1, dist.gamm.0)
+dist.diff.prep <- dist.diff$table
 
-meank.gamm.0 <- bam(distance ~ 
-                      corpus +
-                      #s(session_ordinal, bs = "cr") +
-                      s(age, bs = "cr")  +   
-                      s(age, Speaker, bs="fs", m=1, k=9),  
-                    dat=comparison_data, method = "ML", 
-                    rho=rmeank, AR.start=comparison_data$session_ordinal == 1)
+dist.diff_summ <- summary(dist.diff.prep)
 
-meank.diff <- compareML(meank.gamm.1, meank.gamm.0)
-meank.diff.prep <- meank.diff$table
-
-meank.diff_summ <- summary(meank.diff.prep)
-
-ggplot(comparison_data, aes(x = age, y = distance_z)) +
-  geom_point(shape = 1) +
+ggplot(comparison_summary, aes(x = age, y = dist_mean)) +
   geom_smooth() +
   theme_bw()
 
-
+plot_smooth(dist.gamm.1, view="age", rug=FALSE)
 
 
 ```{r GAMM age target MPL, message=FALSE, warning=FALSE, include=FALSE}
