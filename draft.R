@@ -272,3 +272,29 @@ plot_diff(MPL.gamm.1_DT, view="age", comp=list(data_type=c("target","actual")),
           xlim = c(10,30),
           hide.label = TRUE)
 ```
+
+
+
+ggplot(subset(SWD_red, data_type == "actual"),
+       mapping = aes(x = age, y = path_length)) +
+  geom_smooth() +
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type == "target"),
+       mapping = aes(x = age, y = path_length)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type %in% c("target", "actual")),
+       mapping = aes(x = age, y = path_length, colour = data_type)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
+
+ggplot(subset(SWD_red, data_type %in% c("target", "actual")),
+       mapping = aes(x = age, y = clust_coef_avg, colour = data_type)) +
+  geom_smooth() +  
+  geom_point(shape = 1) +
+  theme_bw()
