@@ -69,3 +69,9 @@ connectivity <- ggplot(data=subset(SWD_red, data_type %in% c("actual", "target")
   theme_bw()  +
   theme(text = element_text(size = 20),
         legend.position = "bottom")
+
+phonological.distance <- ggplot(comparison_summary, aes(x = age, y = dist_mean)) +
+  geom_smooth() +  
+  xlab("Age (months)") +
+  ylab("Mean phonological distance between \nActual and Target form") +
+  theme_bw(base_size = 18)
