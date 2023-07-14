@@ -164,9 +164,34 @@ MPL.0 <- lmerTest::lmer(path_length ~ corpus + age + (1+age|Speaker),
 
 MPL_anova <- anova(MPL, MPL.0)
 
-MPL_df <- MPL_anova$Df[2]
-MPL_chisq <- MPL_anova$Chisq[2]
-MPL_p.value <- MPL_anova$`Pr(>Chisq)`[2]
+model.summary.MPL <- summary(MPL)
+
+MPL_tab <- model.summary.MPL$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
 
 
 ```
@@ -190,13 +215,9 @@ CC.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age * numNodes + (1+age|Speaker
 
 CC_anova <- anova(CC, CC.0)
 
-CC_df <- CC_anova$Df[2]
-CC_chisq <- CC_anova$Chisq[2]
-CC_p.value <- CC_anova$`Pr(>Chisq)`[2]
-
 model.summary.CC <- summary(CC)
 
-beta.val.interaction <- model.summary.CC$coefficients %>% 
+beta.val.interaction.CC <- model.summary.CC$coefficients %>% 
   as.data.frame %>% 
   tibble::rownames_to_column("Effect") %>%
   filter(Effect == "age:numNodes")
@@ -233,12 +254,12 @@ CC_tab <- model.summary.CC$coefficients %>%
 ```
 
 ### Clustering coefficient
-The same patterns were found when clustering coefficient was tested in the model. See Tables \@ref(tab:table-model-output) and \@ref(tab:table-real-sim). The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, and no effect of age in its own right, but network size, and its interaction with age, were found to be significant predictors of average clustering coefficient: clustering coefficient values decreased as network size increased, suggesting that systematicity became stronger in the data over time. The age * network size interaction was also found to be significant, such that with each additional month of age, the effect of network size on clustering coefficient decreased by `r round((beta.val.interaction$Estimate)*100,3)`%.
-
-GOT TO HERE
+The same patterns were found when clustering coefficient was tested in the model. See Tables \@ref(tab:table-model-output) and \@ref(tab:table-real-sim). The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, and no effect of age in its own right, but network size, and its interaction with age, were found to be significant predictors of average clustering coefficient: clustering coefficient values decreased as network size increased, suggesting that systematicity became stronger in the data over time. The age * network size interaction was also found to be significant, such that with each additional month of age, the effect of network size on clustering coefficient decreased by `r round((beta.val.interaction.CC$Estimate)*100,3)`%.
 
 ### Actual vs. Target data
-The unexpected differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a small-world network. To further interrogate systematicity within the data, the Real (Actual) data was compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and network properties within a phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the dataset. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect. Initial model comparisons supported the inclusion of an age * network size interaction in both sets of models.
+The differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a highly systematic small-world network. To further interrogate systematicity within the data, network properties of the Real (Actual) data were compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and clustering within a "standard" phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the dataset. We would expect that mean path length and clustering coefficient would each show higher systematicity in the Actual network than the Target network[^2]. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect. Initial model comparisons supported the inclusion of an age * network size interaction in both sets of models.
+
+[^2]: Note that this result was observed for network growth models in Laing [UR], whereby the Actual network was found to be a better predictor of learning based on the known network of each child.
 
 ```{r data type - mean path length, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -257,92 +278,12 @@ MPL.DT.0 <- lmerTest::lmer(path_length ~ corpus + age * numNodes + (1+age|Speake
 
 MPL.DT_anova <- anova(MPL.DT, MPL.DT.0)
 
-MPL.DT_df <- MPL.DT_anova$Df[2]
-MPL.DT_chisq <- MPL.DT_anova$Chisq[2]
-MPL.DT_p.value <- MPL.DT_anova$`Pr(>Chisq)`[2]
-
-```
-
-There was a significant effect for data type on mean path length. Model outputs revealed that Target data had a significantly higher mean path length than Actual data. See Table XX. This time there was also a significant effect for corpus; French data had a higher mean path length than English data. Both age and network size significantly affected mean path length, which increased as age/network size increased. The age * network size interaction was also significant, but this time the effect was negative, such that the effect of network size on mean path length decreased by XX% with each additional month of age. 
-
-```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
-
-CC.DT <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age * numNodes + (1+age|Speaker),
-                                             data=subset(SWD_red,
-                                                             data_type %in% c("actual", "target")
-                                                           ),
-                                       REML=FALSE)
-#summary(CC.DT)
-
-CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age * numNodes + (1+age|Speaker),
-                                             data=subset(SWD_red,
-                                                             data_type %in% c("actual", "target")
-                                                           ),
-                                       REML=FALSE)
-
-CC.DT_anova <- anova(CC.DT, CC.DT.0)
-
-CC.DT_df <- CC.DT_anova$Df[2]
-CC.DT_chisq <- CC.DT_anova$Chisq[2]
-CC.DT_p.value <- CC.DT_anova$`Pr(>Chisq)`[2]
-
-
-```
-
-The effect of data type on clustering coefficient was also significant. Mean clustering coefficient was significantly lower in Target vs. Actual data. It was also lower in French compared with English data. Mean clustering coefficient decreased as age and network size increased (indicating increased systematicity over time); the age * network size interaction was significant, such that the effect of network size on clustering coefficient decreased by XX% with each additional month of age. 
-
-```{r model outputs, include=FALSE}
-
-table.model.output <- rbind(MPL_anova, MPL.DT_anova, CC_anova, CC.DT_anova) %>%
-  rownames_to_column(var="Model") %>%
-  filter(Chisq > 0) %>%
-  rename(#"PA Df"="Df",
-         #"PA Chisq"="Chisq",
-         "p"=`Pr(>Chisq)`) %>%
-  mutate(Model=fct_recode(Model,
-                           "Mean Path Length (Real vs. Simulated)"="MPL",
-                            "Clustering Coefficient (Real vs. Simulated)"="CC",
-                            "Mean Path Length (Actual vs. Target)"="MPL.DT",
-                            "Clustering Coefficient (Actual vs. Target)"="CC.DT"),
-             p=scales::pvalue(p)) %>%
-  dplyr::select(Model, `Df`, `Chisq`, `p`)
-
-model.summary.MPL <- summary(MPL)
-
-MPL_tab <- model.summary.MPL$coefficients %>%
-  as.data.frame %>%
-  rename(
-    "beta"="Estimate"
-     , "SE"="Std. Error"
-     , "t"="t value"
-     , "p"="Pr(>|t|)") %>%
-  mutate(
-    Effect=papaja:::beautify_terms(rownames(.))
-  ) %>%
-  printnum(
-    digits=c(3, 2, 2, 3)
-    , gt1=c(TRUE, TRUE, TRUE, TRUE)
-    , zero=c(TRUE, TRUE, TRUE, TRUE)
-  ) %>%
-  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
-  mutate(beta=as.numeric(beta),
-        SE=as.numeric(SE),
-        `t`=as.numeric(`t`),
-        `p`=as.numeric(`p`),
-             p=scales::pvalue(p)) %>%
-  mutate(Effect = fct_recode(Effect,
-                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
-                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
-                             "Corpus" = "CorpusFrench")) %>%
-  dplyr::select(Effect, beta, SE, t, p)
-
-add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
-add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
-
-MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
-
-
 model.summary.MPL.DT <- summary(MPL.DT)
+
+beta.val.interaction.MPL.DT <- model.summary.MPL.DT$coefficients %>% 
+  as.data.frame %>% 
+  tibble::rownames_to_column("Effect") %>%
+  filter(Effect == "age:numNodes")
 
 MPL.DT_tab <- model.summary.MPL.DT$coefficients %>%
   as.data.frame %>%
@@ -372,7 +313,33 @@ MPL.DT_tab <- model.summary.MPL.DT$coefficients %>%
                              "Age * Network size" = "Age $\\times$ NumNodes")) %>%
   dplyr::select(Effect, beta, SE, t, p)
 
+```
+
+There was a significant effect for data type on mean path length. See Table \@ref(tab:table-model-output). Model outputs revealed that Target data had a significantly higher mean path length than Actual data (see Table \@ref(tab:table-actual-target)). This time there was also a significant effect for corpus; French data had a higher mean path length than English data. Both age and network size significantly affected mean path length, which increased as age/network size increased. The age * network size interaction was also significant, but this time the effect was negative, such that the effect of network size on mean path length decreased by `r round((beta.val.interaction.MPL.DT$Estimate)*100,3)`% with each additional month of age. 
+
+```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+CC.DT <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+#summary(CC.DT)
+
+CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age * numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+CC.DT_anova <- anova(CC.DT, CC.DT.0)
+
 model.summary.CC.DT <- summary(CC.DT)
+
+beta.val.interaction.CC.DT <- model.summary.CC.DT$coefficients %>% 
+  as.data.frame %>% 
+  tibble::rownames_to_column("Effect") %>%
+  filter(Effect == "age:numNodes")
 
 CC.DT_tab <- model.summary.CC.DT$coefficients %>%
   as.data.frame %>%
@@ -402,13 +369,38 @@ CC.DT_tab <- model.summary.CC.DT$coefficients %>%
                              "Age * Network size" = "Age $\\times$ NumNodes"))%>%
   dplyr::select(Effect, beta, SE, t, p)
 
+```
+
+The effect of data type on clustering coefficient was also significant. Mean clustering coefficient was significantly lower in Target vs. Actual data. It was also lower in French compared with English data. Mean clustering coefficient decreased as age and network size increased (indicating increased systematicity over time); the age * network size interaction was significant, such that the effect of network size on clustering coefficient decreased by `r round((beta.val.interaction.CC.DT$Estimate)*100,3)`% with each additional month of age. 
+
+GOT TO HERE - NEED TO SORT FIGURES.
+
+```{r model outputs, include=FALSE}
+
+table.model.output <- rbind(MPL_anova, MPL.DT_anova, CC_anova, CC.DT_anova) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Model=fct_recode(Model,
+                           "Mean Path Length (Real vs. Simulated)"="MPL",
+                            "Clustering Coefficient (Real vs. Simulated)"="CC",
+                            "Mean Path Length (Actual vs. Target)"="MPL.DT",
+                            "Clustering Coefficient (Actual vs. Target)"="CC.DT"),
+             p=scales::pvalue(p)) %>%
+  dplyr::select(Model, `Df`, `Chisq`, `p`)
+
+add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+
+MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
 
 real_v_sim <- cbind(MPL_tab, CC_tab)
 actual_v_target <- cbind(MPL.DT_tab, CC.DT_tab)
 
 actual_v_target[6] <- NULL
 real_v_sim[6] <- NULL
-
 
 ```
 
