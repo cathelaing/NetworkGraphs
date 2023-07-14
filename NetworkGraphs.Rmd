@@ -66,7 +66,7 @@ Infants' early words are phonologically similar to one another, if not in the vo
 
 Systematicity in early phonological development is most comprehensively discussed in work by Vihman [REFs]. In more than four decades of work incorporating data from hundreds of infants acquiring an impressive range of languages, Vihman demonstrates a clear systematicity in infants' path to target-like word production. From the initial 'surprisingly accurate' [ref?] forms that appear in the first stages of word production, infants are shown to draw on what they know: they generally choose, for first production, words that are simple in their target phonological form, with consonants that are already familiar from the most common syllables of canonical babble [@mccune_early_2001]. These forms are, in Vihman's terms, *selected* for first word production owing to their easily-producible features. As the vocabulary grows, infant must necessarily acquire forms that do not contain such accessible phonological or segmental properties. Here we begin to see regression in the accuracy of early production, as infants systematically adapt forms to fit the most common structures and segments in their repertoire. When words are systematically altered to fit an evidently dominant pattern in the child's output, these forms are said to be *adapted*. That is, systematicity is apparent not just in the earliest words, but across the trajectory of acquisition as infants deal with the challenges of early word production by relying on well-rehearsed output forms. That is, over the first months of lexical development at least, infants' productions of newly-acquired words are likely to match their productions of existing words in the lexicon.
 
-In previous work [Laing, under review], I draw on network analysis to show that in the first three years of life, infants' production of new words can be predicted based on the words they already produce. That is, a word is more likely to be acquired if it is phonologically similar to highly-connected existing words in the productive repertoire, or words that cluster together as phonologically-similar forms. This effect becomes stronger over time, suggesting that systematicity is more relevant to later word learning (at least, upto age 30 months) than in the first few months of word production. This reflects the systematicity that has been well-documented in previous studies [refs]. Moreover, the phonological properties of infants' word productions are more similar to one another than their adult target forms would suggest. Looking at other similar studies, reveals some support for these results, as well as some inconsistencies in approaches and subsequent findings. Laing [ref] drew on corpus data of monthly word production across nine infants; similar results have been observed by Kalinowski et al [in prep], who draw on vocabulary norms from >1000 Norwegian infants taken longitudinally at upto six individual time-points. Systematicity was also identified in early word learning by Siew and Vitevitch [ref], in an analysis of vocabulary norms of children aged 3-9 years acquiring English and Dutch. On the other hand, Fourtassi and colleagues [] analysed productive vocabulary norms for infants aged 16-30 acquiring a range of 10 languages, to find that acquisition of newly-acquired words was not predicted by the phonological form of previously-acquired words (based on assumptions made by vocabulary norming data). Instead, the connectivity of the *external* network was more likely to inform word learning: phonologically-similar words in the input were a better predictor of learning than highly-connected known words. However, as pointed out in Laing [] and Kalinowski et al. [], this study, and that of Siew and Vitevitch [], did not analyse the same infants over a range of time-points, meaning that it may not have been possible to capture phonological systematicity in this data.
+In previous work [Laing, under review], I draw on network analysis to show that in the first three years of life, infants' production of new words can be predicted based on the words they already produce. That is, a word is more likely to be acquired if it is phonologically similar to highly-connected existing words in the productive repertoire, or words that cluster together as phonologically-similar forms. This effect becomes stronger over time, suggesting that systematicity is more relevant to later word learning (at least, upto age 30 months) than in the first few months of word production. This reflects the systematicity that has been well-documented in previous studies [refs]. Moreover, the phonological properties of infants' word productions are more similar to one another than their adult target forms would suggest. Looking at other similar studies, reveals some support for these results, as well as some inconsistencies in approaches and subsequent findings. Laing [ref] drew on corpus data of fortnightly word production across nine infants; similar results have been observed by Kalinowski et al [in prep], who draw on vocabulary norms from >1000 Norwegian infants taken longitudinally at upto six individual time-points. Systematicity was also identified in early word learning by Siew and Vitevitch [ref], in an analysis of vocabulary norms of children aged 3-9 years acquiring English and Dutch. On the other hand, Fourtassi and colleagues [] analysed productive vocabulary norms for infants aged 16-30 acquiring a range of 10 languages, to find that acquisition of newly-acquired words was not predicted by the phonological form of previously-acquired words (based on assumptions made by vocabulary norming data). Instead, the connectivity of the *external* network was more likely to inform word learning: phonologically-similar words in the input were a better predictor of learning than highly-connected known words. However, as pointed out in Laing [] and Kalinowski et al. [], this study, and that of Siew and Vitevitch [], did not analyse the same infants over a range of time-points, meaning that it may not have been possible to capture phonological systematicity in this data.
 
 This previous work reported above uses network growth algorithms to test whether learning can be predicted based on the words that infants already know or produce. This method works on the assumption that, if infants' early word acquisition and production is phonologically systematic, then it should be possible to predict learning based on the known words in the infant's existing lexicon. Network growth models present a compelling computational approach to observing systematicity in the developing lexicon, but they don't give us a clear view into the extent to which early-acquired forms are produced in a phonologically similar way. That is, network growth models analyse connectivity (are two words similar, yes or no? if yes then they are connected in the network), rather than phonological distance (*how* similar are two words in the network?). This study expands on previous work, and builds on findings from Laing [UR], by analysing network graphs of infants' early lexicons. This provides an insight into the properties of the network, including how densely-connected the network is, and the phonological distance between items in the network. It also allows us to make predictions about network properties over time that reflect word selection and adaptation. Following Laing [UR], this paper will analyse infants' actual productions as well as the adult target forms, to test the extent to which systematicity is present in production, in terms of both the words infants select in early development, and how they produce them. 
 
@@ -86,47 +86,63 @@ To address the second question, network graphs of infants' actual productions wi
 
 ## Data extraction and preparation
 
-Data were drawn from two corpora on PhonBank (https://phonbank.talkbank.org/): Providence [American English, @demuth_word-minimality_2006] and Lyon [French, @demuth_katherine_prosodically-conditioned_2008]. These were selected due to their equivalent data collection methods and the fact that the infants' productions, as well as the corresponding target forms, are phonetically transcribed. Nine infants' (5 English, 4 French, 4 boys overall) data were extracted using Phon [@hedlund_gregory_phon_2020], from the transcript with their first-recorded word to the final transcript taken at age 2;6. Infants were recorded in the home on a fortnightly basis, participating in naturalistic interactions with their caregivers. Two of the American infants were recorded weekly during some periods of data collection, but this is not an issue for this analysis since no between-child comparisons will be made. See Demuth et al. [-@demuth_word-minimality_2006] and Demuth and Tremblay [-@demuth_katherine_prosodically-conditioned_2008] for full details of data collection.
+This study draws on the same data as that analysed by Laing [UR]. This was drawn from two corpora on PhonBank (https://phonbank.talkbank.org/): Providence [American English, @demuth_word-minimality_2006] and Lyon [French, @demuth_katherine_prosodically-conditioned_2008]. These were selected due to their equivalent data collection methods and the fact that the infants' productions, as well as the corresponding target forms, are phonetically transcribed. Nine infants' (5 English, 4 French, 4 boys overall) data were extracted using Phon [@hedlund_gregory_phon_2020], from the transcript with their first-recorded word to the final transcript taken at age 2;6. Infants were recorded in the home on a fortnightly basis, participating in naturalistic interactions with their caregivers. Two of the American infants were recorded weekly during some periods of data collection, but this is not an issue for this analysis since no between-child comparisons will be made. See Demuth et al. [-@demuth_word-minimality_2006] and Demuth and Tremblay [-@demuth_katherine_prosodically-conditioned_2008] for full details of data collection.
 
 Extracted data was filtered to include only words featuring on the communicative development inventory (CDI) of the respective language, including all variants of a given form. For example, plurals were included alongside the singular noun form, and variable verb conjugations alongside their corresponding infinitive verb form. These data were used to create a network for each infant, whereby all words in a given month that hadn't been produced in previous months were included as new items in the network. When a word had been produced in previous months, it was not included. While this means that the data does not capture change in the production of a single form over time, it allows us to observe network growth at the point of acquisition for each word form. 
 
-To determine the structure of the network, the first step was to create distance values between each word and each other word in the network. This was first done using a 'global' network of all forms produced by the infant up to the final session at 2;6, to create a large distance matrix for each infant that incorporated all word productions. Distance values were generated using methods set out in Monaghan et al. [-@monaghan_measures_2010], using distinctive features to generate a set of phonetic values for each word that could then be compared with all other words (note that only consonants were analysed, given that vowels are highly variable in early production and also very difficult to transcribe accurately; [@donegan_normal_2013; @kent_what_2020]). Euclidean distance between the values of each word and each other word in each infant's global network was then used to determine how close/distant words were from one another. Often, infants produced multiple tokens of the same word type in a given month, often with high variability across tokens. Because it was not possible to generate networks with all tokens included (even with only single word types included, the final dataset for all nine infants includes over 5.5 million data points), a mean value for each distinctive feature was established across tokens, meaning that each word's distinctive feature value represents the variability of the infant's production of a given word. This may not be a perfect measure, but it is more representative than taking, for example, the first instance of each word type.
+To determine the structure of the network, the first step was to create distance values between each word and each other word in the network. This was first done using a 'global' network of all forms produced by the infant up to the final session at 2;6, to create a large distance matrix for each infant that incorporated all word productions. Distance values were established using methods set out in Monaghan et al. [-@monaghan_measures_2010], using distinctive features to generate a set of phonetic values for each word that could then be compared with all other words (note that only consonants were analysed, given that vowels are highly variable in early production and also very difficult to transcribe accurately; [@donegan_normal_2013; @kent_what_2020]). Euclidean distance between the values of each word and each other word in each infant's global network was then used to determine how close/distant words were from one another. Often, infants produced multiple tokens of the same word type in a given month, often with high variability across tokens. Because it was not possible to generate networks with all tokens included (even with only single word types included, the final dataset for all nine infants includes over 5.5 million data points, once distance between each word and each other word is calculated), a mean value for each distinctive feature was established across tokens, meaning that each word's distinctive feature value represents the variability of the infant's production of a given word. This may not be a perfect measure, but it is more representative than taking, for example, the first instance of each word type.
 
 Distance scores were generated between each word and each other word in each child's dataset, for both Target and Actual forms. These scores were then normalised, and a normalised distance of 0.25 was chosen to indicate connectivity. That is, words were said to be connected in the network if their distance score was ≤0.25. This accounted for the lower quartile of connectivity across the dataset. See Supplementary Materials for an overview of how this measure was established.
 
-adapt this bit to fit with the data used in this analysis (and re-write):
+```{r data overview}
+types.corpus <- comparison_data %>%
+  group_by(corpus, Speaker) %>%
+  distinct(Gloss, .keep_all=T) %>%
+  tally() %>% summarise(n=sum(n))
 
-<!-- The final dataset includes `r round(types$n)` word types overall, aggregated across infants (English=`r round(subset(types.corpus, corpus == "English")$n)`, French=`r round(subset(types.corpus, corpus == "French")$n)`). On average, there were `r round(tokens$mean_tok)` tokens of each word type (SD = `r round(tokens$sd_tok)`). See Table \@ref(tab:table-data-overview) for a breakdown by corpus and child. All but `r syl.4` tokens (all French) in the data had three syllables or fewer in the target form, with `r round(subset(syls, corpus == "English")$mean_syl)` syllable on average in the English data (SD = `r round(subset(syls, corpus == "English")$sd_syl,2)`) and `r round(subset(syls, corpus == "French")$mean_syl,2)` in the French data (SD = `r round(subset(syls, corpus == "French")$sd_syl,2)`). -->
+types <- comparison_data %>%
+  group_by(Speaker) %>%
+  distinct(Gloss, .keep_all=T) %>%
+  tally() %>% summarise(n=sum(n))
+
+tokens <- comparison_data %>%
+  group_by(Gloss, Speaker) %>%
+  tally() %>% ungroup() %>%
+  summarise(mean_tok=mean(n),
+            sd_tok=sd(n))
+
+tokens.corpus <- comparison_data %>%
+  group_by(Gloss, Speaker, corpus) %>%
+  tally() %>% ungroup() %>%
+  group_by(corpus) %>%
+  summarise(mean_tok=mean(n),
+            sd_tok=sd(n))
+
+```
+
+The final dataset includes `r round(types$n)` word types in total, with `r round(subset(types.corpus, corpus == "English")$n)` in the English corpus and `r round(subset(types.corpus, corpus == "French")$n)`) in the French corpus. On average, infants produced `r round(tokens$mean_tok)` tokens of each word type in a single session (SD = `r round(tokens$sd_tok)`; mean English = `r round(subset(tokens.corpus, corpus == "English")$mean_tok)`, SD = `r round(subset(tokens.corpus, corpus == "English")$sd_tok)`; mean French = `r round(subset(tokens.corpus, corpus == "French")$mean_tok)`, SD = `r round(subset(tokens.corpus, corpus == "French")$sd_tok)`). 
 
 ## Data analysis
 
 ### Network graphs
 
-The prepared data was then used to generate a series of network graphs for each infant (for both Target and Actual data) using the *igraph()* package in R [@R-igraph]. One network was generated per month, for each month in the dataset, and these grew cumulatively such that the network at time-point *n*+1 included all words at time-point *n*, plus all additional words produced for the first time at *n*+1.  
+The prepared data was then used to generate a series of network graphs for each infant (for both Target and Actual data) using the *igraph()* package in R [@R-igraph]. One network was generated per month, for each month in the dataset, based on all words produced in the given month and all months prior. The network at time-point *n*+1 thus included all words at time-point *n*, plus all additional words produced for the first time at *n*+1. The *igraph()* package generates graphs that include all nodes (whether or not they are connected to other nodes[^1]), and measures the distance between all connected nodes, as well as the clustering of nodes in graphical space. 
 
-The *igraph()* package generates graphs that include all nodes (whether or not they are connected to other nodes), and accounts for the distance between nodes, as well as the clustering of nodes in graphical space. 
+[^1]: Recall that any two nodes that have a scaled phonological distance of >.25 will not be connected.
 
 Two key variables will be explored through an analysis of network graphs: *mean path length* and *clustering coefficient*. Path length is a measure of distance between nodes, and mean path length indexes the average connectivity (of all connected nodes) within a network; by this measure, we would expect that systematicity in early phonological development would be reflected in low mean path length. Clustering coefficient is an indication of network density: a higher density of nodes in the network indicates denser clusters of similar forms; again, this is what we would expect to see in a network of early phonological development. See Goldbeck [-@golbeck_analyzing_2013] for a full overview of network structures and measures.
 
 ### Simulated networks
 
-PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To test this, mean path length and clustering coefficient values were generated for both the Target and Actual networks, as outlined below. Data were compared to the growth of a simulated small-world network, known as a Watts-Strogatz network [@watts_collective_1998]; if no statistical differences are observed between the real and simulated data over the trajectory of development, then a PAT-like model of network growth may be present in the data. The real data were also compared to a similarly-sized but randomly-generated network known as a Erdős–Rényi model. If the real network grows in a systematic way, then we would expect the real data to differ significantly from the randomly-generated Erdős–Rényi network. To run these analyses, network graphs were computed for each child at each month in the dataset, such that the network grew cumulatively over time - all words produced in the given month and all previous months were included in each month's network. Mean path length and clustering coefficient were calculated for each graph, and then compared to the two kinds of simulated data, matched for network size: a Watts-Strogatz network (prototypical PAT-like network) and an Erdős–Rényi network (random network).
-
-MPL = global property of network (typical distance between 2 nodes in the network)
-CC = locall property of network (clustering of a typical neighbourhood within the network)
-
-Watts & Strogatz, 1998
-
-### Simulated networks
-PAT-like networks should exhibit properties of small-world network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words, especially in earlier development. To test this, mean path length and clustering coefficient values were generated for both the Target and Actual networks, as outlined below. Data were compared to the growth of a simulated small-world network, known as a Watts-Strogatz network [@watts_collective_1998]; if no statistical differences are observed between the real and simulated data over the trajectory of development, then a PAT-like model of network growth may be present in the data. The real data were also compared to a similarly-sized but randomly-generated network known as a Erdős–Rényi model. If the real network grows in a systematic way, then we would expect the real data to differ significantly from the randomly-generated Erdős–Rényi network. To run these analyses, network graphs were computed for each child at each month in the dataset, such that the network grew cumulatively over time - all words produced in the given month and all previous months were included in each month's network. Mean path length and clustering coefficient were calculated for each graph, and then compared to the two kinds of simulated data, matched for network size: a Watts-Strogatz network (prototypical PAT-like network) and an Erdős–Rényi network (random network). Watts-Strogatz simulations match both the mean degree and the network size of the network in each month; Erdős–Rényi networks require only network size to be specified.
+PAT-like networks should exhibit properties of prototypical "small-world" network growth, namely a low mean path length and a high clustering coefficient [@watts_collective_1998; @amaral_classes_2011; @steyvers_large-scale_2005]: words should be more densely connected, with shorter connections between words. To test this, mean path length and clustering coefficient values were generated for both the Target and Actual networks, as outlined below. Data were compared to the growth of a simulated small-world network, known as a Watts-Strogatz network [@watts_collective_1998]; if no statistical differences are observed between the real and simulated data over the trajectory of development, this would reflect strong systematicity in growth of the real network. The real data were also compared to a similarly-sized but randomly-generated network known as a Erdős–Rényi model. Similarly, if the real network grows in a systematic way, then we would expect the real data to differ significantly from the randomly-generated Erdős–Rényi network. To run these analyses, mean path length and clustering coefficient were calculated for each monthly graph, and then compared to the two kinds of simulated data, matched for network size: a Watts-Strogatz network (prototypical systematic network) and an Erdős–Rényi network (random network). Watts-Strogatz simulations were generated to match both the mean connectivity and the network size of the network in each month; Erdős–Rényi networks require only network size to be specified.
 
 # Results
 
-## How systematic are early word productions, and (how) does this change over time?
+## RQ1: How systematic are early word productions, and (how) does this change over time?
 
-- we already know that network growth algoritms can predict learning due to systematicity. Looking specifically at properites of network graphs, we would expect to see shorter MPL and higher CC in infants' actual productions compared with model graphs. Following Laing (under review), the early vocabulary is expected to become more systematic with age. In the case of this analysis, we expect to see shorter MPL over time, and higher CC. 
+To test RQ1, network graphs were compared to simulated small world and random networks of equivalent size to determine whether the data (the *Real* network) differed from the *Simulated* networks. Recall that systematic network growth, as predicted here, should reflect a small-world network growth structure. Two key components of these networks were compared: mean path length and clustering coefficient. Small-world networks typically have a low mean path length and a high clustering coefficient; for both measures we would expect the Real data to differ significantly from the Simulated Erdős–Rényi (random) network, and for the Real network to show similar properties to the Simulated Watts-Strogatz (small-world) network. Note that the extent of the expected statistical difference is not easy to predict here: if the Real network is very similar to the Watts-Strogatz network then no statistical difference would be expected, but this relies on the Real data being highly systematic, which may not be realistic. In order to fully understand the nature of the data, figures and model outputs will be inspected in relation to these predictions.
 
-to test RQ1, network graphs were compared to simulated small world and random networks of equivalent size to determine whether the data (the *Real* network) differed from the *Simulated* networks. Recall that systematic network growth, as predicted here, should reflect a small-world network growth structure. Two key components of small-world networks were compared: mean path length and clustering coefficient. Small-world networks typically have a low mean path length and a high clustering coefficient; for both measures we would expect the Real data to differ significantly from the Simulated Erdős–Rényi (random) network, and to see no statistical difference between the Real network and the Simulated Watts-Strogatz (small-world) network. The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as dependent variables, respectively, each with data type (Real vs. small-world vs. random), corpus (English vs. French) and age as fixed effects, and subject as a random effect with a by-subject random slope for the effect of age. Initial model comparisons showed that including network size to the model improved fit for the clustering coefficient data, but not for mean path length, so an age*network size interaction was included in this model only. 
+The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as dependent variables, respectively, each with data type (Real vs. small-world vs. random), corpus (English vs. French) and age as fixed effects, and subject as a random effect with a by-subject random slope for the effect of age. Initial model comparisons showed that including network size to the model improved fit for the clustering coefficient data, but not for mean path length, so an age*network size interaction was included in this model only. 
 
 ### Mean Path Length
 Mean path length was calculated for each child's monthly networks using the *igraph()* package in R [@R-igraph]. Equivalent-sized Watts-Strogatz and Erdős–Rényi networks were generated for comparison.  
@@ -154,8 +170,8 @@ MPL_p.value <- MPL_anova$`Pr(>Chisq)`[2]
 
 
 ```
-Nested model comparisons revealed a significant effect for data type on mean path length. See Table XX. As shown in Table XX, the Real data had a significantly lower mean path length than the random Simulated data, as predicted. However, the Real data also differed significantly from the small-world Simulated data, which, contrary to predictions, had a significantly shorter mean path length than that of the Real data. Model outputs revealed no effect for corpus or age on the data. 
 
+Nested model comparisons revealed a significant effect for data type on mean path length. See Table \@ref(tab:table-model-output). As shown in Table \@ref(tab:table-real-sim), the Real data had a significantly lower mean path length than the random Simulated data, as predicted. However, the Real data also differed significantly from the small-world Simulated data, which had a significantly shorter mean path length than that of the Real data. Model outputs revealed no effect for corpus or age on the data. COntrary to preductions, there was no change in systematicity over time, at least in terms of mean distance between words. 
 
 ```{r clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -178,9 +194,48 @@ CC_df <- CC_anova$Df[2]
 CC_chisq <- CC_anova$Chisq[2]
 CC_p.value <- CC_anova$`Pr(>Chisq)`[2]
 
+model.summary.CC <- summary(CC)
+
+beta.val.interaction <- model.summary.CC$coefficients %>% 
+  as.data.frame %>% 
+  tibble::rownames_to_column("Effect") %>%
+  filter(Effect == "age:numNodes")
+
+CC_tab <- model.summary.CC$coefficients %>%
+  as.data.frame %>%
+  rename(
+    "beta"="Estimate"
+     , "SE"="Std. Error"
+     , "t"="t value"
+     , "p"="Pr(>|t|)") %>%
+  mutate(
+    Effect=papaja:::beautify_terms(rownames(.))
+  ) %>%
+  printnum(
+    digits=c(3, 2, 2, 3)
+    , gt1=c(TRUE, TRUE, TRUE, TRUE)
+    , zero=c(TRUE, TRUE, TRUE, TRUE)
+  ) %>%
+  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
+  mutate(beta=as.numeric(beta),
+        SE=as.numeric(SE),
+        `t`=as.numeric(`t`),
+        `p`=as.numeric(`p`),
+             p=scales::pvalue(p)) %>%
+  mutate(Effect = fct_recode(Effect,
+                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
+                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes",
+                             "Age * Network size" = "Age $\\times$ NumNodes")) %>%
+  dplyr::select(Effect, beta, SE, t, p)
+
 ```
+
 ### Clustering coefficient
-The same patterns were found when clustering coefficient was tested in the model. The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, but network size, and its interaction with age, were found to be significant predictors of average clustering coefficient: clustering coefficient values decreased as network size increased, suggesting that systematicity became stronger in the data over time. The age * network size interaction was also found to be significant, such that with each additional month of age, the effect of network size on clustering coefficient decreased by XX%.
+The same patterns were found when clustering coefficient was tested in the model. See Tables \@ref(tab:table-model-output) and \@ref(tab:table-real-sim). The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, and no effect of age in its own right, but network size, and its interaction with age, were found to be significant predictors of average clustering coefficient: clustering coefficient values decreased as network size increased, suggesting that systematicity became stronger in the data over time. The age * network size interaction was also found to be significant, such that with each additional month of age, the effect of network size on clustering coefficient decreased by `r round((beta.val.interaction$Estimate)*100,3)`%.
+
+GOT TO HERE
 
 ### Actual vs. Target data
 The unexpected differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a small-world network. To further interrogate systematicity within the data, the Real (Actual) data was compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and network properties within a phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the dataset. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect. Initial model comparisons supported the inclusion of an age * network size interaction in both sets of models.
@@ -207,6 +262,7 @@ MPL.DT_chisq <- MPL.DT_anova$Chisq[2]
 MPL.DT_p.value <- MPL.DT_anova$`Pr(>Chisq)`[2]
 
 ```
+
 There was a significant effect for data type on mean path length. Model outputs revealed that Target data had a significantly higher mean path length than Actual data. See Table XX. This time there was also a significant effect for corpus; French data had a higher mean path length than English data. Both age and network size significantly affected mean path length, which increased as age/network size increased. The age * network size interaction was also significant, but this time the effect was negative, such that the effect of network size on mean path length decreased by XX% with each additional month of age. 
 
 ```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
@@ -232,6 +288,7 @@ CC.DT_p.value <- CC.DT_anova$`Pr(>Chisq)`[2]
 
 
 ```
+
 The effect of data type on clustering coefficient was also significant. Mean clustering coefficient was significantly lower in Target vs. Actual data. It was also lower in French compared with English data. Mean clustering coefficient decreased as age and network size increased (indicating increased systematicity over time); the age * network size interaction was significant, such that the effect of network size on clustering coefficient decreased by XX% with each additional month of age. 
 
 ```{r model outputs, include=FALSE}
@@ -283,39 +340,6 @@ add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p =
 add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
 
 MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
-
-
-
-model.summary.CC <- summary(CC)
-
-CC_tab <- model.summary.CC$coefficients %>%
-  as.data.frame %>%
-  rename(
-    "beta"="Estimate"
-     , "SE"="Std. Error"
-     , "t"="t value"
-     , "p"="Pr(>|t|)") %>%
-  mutate(
-    Effect=papaja:::beautify_terms(rownames(.))
-  ) %>%
-  printnum(
-    digits=c(3, 2, 2, 3)
-    , gt1=c(TRUE, TRUE, TRUE, TRUE)
-    , zero=c(TRUE, TRUE, TRUE, TRUE)
-  ) %>%
-  #select(Effect, `beta`, `SE`, `t`, `p`) %>%
-  mutate(beta=as.numeric(beta),
-        SE=as.numeric(SE),
-        `t`=as.numeric(`t`),
-        `p`=as.numeric(`p`),
-             p=scales::pvalue(p)) %>%
-  mutate(Effect = fct_recode(Effect,
-                             "Real vs. Watts-Strogatz" = "Data typeWS actual",
-                             "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
-                             "Corpus" = "CorpusFrench",
-                             "Network size" = "NumNodes",
-                             "Age * Network size" = "Age $\\times$ NumNodes")) %>%
-  dplyr::select(Effect, beta, SE, t, p)
 
 
 model.summary.MPL.DT <- summary(MPL.DT)

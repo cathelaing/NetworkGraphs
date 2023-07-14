@@ -6,6 +6,12 @@ Another issue with these previous studies is the way in which phonological simil
 
 In Laing [under review] I addressed these issues by drawing on Euclidean distance as a measure of phonological distance. Following work by Monaghan and colleagues [ref], who used distinctive features from the government phonology school to take into account the more subtle phonetic differences between different speech sounds, this study calculated a 'distance score' between each word and each other word in the child's production (both actual productions and the adult target form) to create an individual network of lexical items for each infant in the dataset, that grew month-by-month as the vocabulary increased in size. This method has since been replicated by Kalinowski [ref], who also extended the approach to test the phonological properties of each word as individual 'feature bundles' [CHECK]. This approach differed from that of Laing [UR] because it did not compare speech sounds according to their phonological positioning within the word. Whereas Laing considered onset consonants in relation to other onset consonants, and codas in relation to other codas, etc, Kalinowski iterated across each word to establish an overall value of all the features of each word, regardless of what order the segments were produced in. This meant that if a child produced the form *shoe* as [uʃi] (with the consonant in S2 onset) and *sheep* as [ʃi] (with the consonant in S1 onset), the forms would still be considered as phonologically the same. This approach captures systematicity in early production even more appropriately, as it allows for the fact that often consonants may be similar across words (for example, through the presence of consonant harmony or reduplication), as well as between them. However, note that Kalinowski also tested the Euclidean distance method (and Levenshtein distance) in her data, and found consistent evidence for systematicity in the adult target words that Norwegian infants acquired over the first XX months of development. Note also that this analysis drew on vocabulary norming data, rather than naturalistic data.
 
+
+MPL = global property of network (typical distance between 2 nodes in the network)
+CC = locall property of network (clustering of a typical neighbourhood within the network)
+
+Watts & Strogatz, 1998
+
 ```{r plots}
 
 path_length_plot <- ggplot(data=subset(SWD_red,
