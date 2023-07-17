@@ -70,8 +70,12 @@ connectivity <- ggplot(data=subset(SWD_red, data_type %in% c("actual", "target")
   theme(text = element_text(size = 20),
         legend.position = "bottom")
 
-phonological.distance <- ggplot(comparison_summary, aes(x = age, y = dist_mean)) +
-  geom_smooth() +  
-  xlab("Age (months)") +
-  ylab("Mean phonological distance between \nActual and Target form") +
-  theme_bw(base_size = 18)
+# phonological.distance <- ggplot(comparison_summary, aes(x = age, y = dist_mean, colour = Speaker)) +
+#   geom_smooth() +  
+#   #geom_point(shape = 1, size = 1, position=position_jitter(.1), colour = "lightgrey") +
+#   #coord_cartesian(ylim=c(0,4.5)) +
+#   xlab("Age (months)") +
+#   ylab("Mean phonological distance between \nActual and Target form") +
+#   theme_bw(base_size = 18) +
+#   facet_wrap(~Speaker, ncol=3)
+
