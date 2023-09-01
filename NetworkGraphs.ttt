@@ -1,0 +1,49 @@
+\begin{longtable}[t]{cccc}
+\caption{\label{tab:table-model-output}Outputs from nested model comparisons testing the effect of data type (Real vs. Simulated and Actual vs. Target on mean path length and clustering coefficient.}\\
+\toprule
+Model & Df & Chisq & p\\
+\midrule
+Mean Path Length (Real vs. Simulated) & 2 & 525.39 & <0.001\\
+Mean Path Length (Actual vs. Target) & 1 & 379.77 & <0.001\\
+Clustering Coefficient (Real vs. Simulated) & 2 & 1186.27 & <0.001\\
+Clustering Coefficient (Actual vs. Target) & 1 & 127.54 & <0.001\\
+\midrule
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[t]{ccccccccc}
+\caption{\label{tab:table-real-sim}Outputs from linear regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient.}\\
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+Effect & beta & SE & t & p & beta & SE & t & p\\
+\midrule
+Intercept & 1.35 & 0.12 & 11.22 & <0.001 & 0.81 & 0.03 & 26.56 & <0.001\\
+Real vs. Erdos–Rényi & 1.21 & 0.05 & 23.60 & <0.001 & -0.66 & 0.01 & -60.88 & <0.001\\
+Real vs. Watts-Strogatz & -0.37 & 0.05 & -7.45 & <0.001 & 0.16 & 0.01 & 14.92 & <0.001\\
+Corpus & 0.03 & 0.04 & 0.72 & 0.471 & -0.01 & 0.01 & -1.50 & 0.165\\
+Age & 0.01 & 0.00 & 1.34 & 0.213 & 0.00 & 0.00 & 0.32 & 0.753\\
+\addlinespace
+Network size & NA & NA & NA & NA & 0.00 & 0.00 & -6.30 & <0.001\\
+Age * Network size & NA & NA & NA & NA & 0.00 & 0.00 & 3.42 & 0.001\\
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[t]{ccccccccc}
+\caption{\label{tab:table-actual-target}Outputs from linear regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient.}\\
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+Effect & beta & SE & t & p & beta & SE & t & p\\
+\midrule
+Intercept & 1.03 & 0.08 & 12.82 & <0.001 & 0.95 & 0.03 & 32.14 & <0.001\\
+Actual vs. Target & 0.30 & 0.01 & 28.62 & <0.001 & -0.10 & 0.01 & -12.70 & <0.001\\
+Corpus & 0.06 & 0.02 & 2.86 & 0.021 & -0.04 & 0.01 & -4.79 & <0.001\\
+Age & 0.01 & 0.00 & 3.03 & 0.007 & -0.01 & 0.00 & -3.79 & <0.001\\
+Network size & 0.00 & 0.00 & 10.83 & <0.001 & 0.00 & 0.00 & -6.96 & <0.001\\
+\addlinespace
+Age * Network size & 0.00 & 0.00 & -5.62 & <0.001 & 0.00 & 0.00 & 4.08 & <0.001\\
+\bottomrule
+\end{longtable}
