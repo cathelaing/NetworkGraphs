@@ -148,7 +148,7 @@ Networks with high phonological systematicity should exhibit properties of proto
 
 To test RQ1, network graphs were compared to simulated small world and random networks of equivalent size to determine whether the data (the *Real* network, drawing from infants' Actual productions) differed from the *Simulated* networks. For both mean path length and clustering coefficient, we would expect the Real data to differ significantly from the Simulated Erdős–Rényi (random) network, and for the Real network to show similar properties to the Simulated Watts-Strogatz (small-world) network. Note that the extent of the expected statistical difference is not easy to predict here: if the Real network is very similar to the Watts-Strogatz network then no statistical difference would be expected, but this relies on the Real data being highly systematic, which may not be realistic. In order to fully understand the nature of the data, figures and model outputs will be inspected in relation to these predictions.
 
-The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as dependent variables, respectively, each with data type (Real vs. small-world vs. random), corpus (English vs. French) and age as fixed effects, and subject as a random effect with a by-subject random slope for the effect of age. 
+The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as dependent variables, respectively, each with data type (Real vs. small-world vs. random), corpus (English vs. French) and age as fixed effects, and subject as a random effect with a by-subject random slope for the effect of age. Initial model comparisons showed that including network size, alongside age, improved fit in the model testing clustering coefficient, but not mean path length. Network size is thus included as a fixed effect in the clustering coefficient model only.
 
 ### Mean Path Length
 
@@ -205,14 +205,14 @@ Nested model comparisons revealed a significant effect for data type on mean pat
 
 ```{r clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
 
-CC <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age + (1+age|Speaker),
+CC <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
                                                              data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
                                                            ),
                                        REML=FALSE)
 #summary(CC)
 
-CC.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + (1+age|Speaker),
+CC.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
                                                              data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
                                                            ),
@@ -222,10 +222,6 @@ CC_anova <- anova(CC, CC.0)
 
 model.summary.CC <- summary(CC)
 
-# beta.val.interaction.CC <- model.summary.CC$coefficients %>% 
-#   as.data.frame %>% 
-#   tibble::rownames_to_column("Effect") %>%
-#   filter(Effect == "age:numNodes")
 
 CC_tab <- model.summary.CC$coefficients %>%
   as.data.frame %>%
@@ -251,29 +247,33 @@ CC_tab <- model.summary.CC$coefficients %>%
   mutate(Effect = fct_recode(Effect,
                              "Real vs. Watts-Strogatz" = "Data typeWS actual",
                              "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
-                             "Corpus" = "CorpusFrench")) %>%
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes")) %>%
   dplyr::select(Effect, beta, SE, t, p)
+
+cc_nodes.beta <- abs((subset(CC_tab, Effect == "Network size")$beta)*100)
+  
 
 ```
 
 ### Clustering coefficient
-The same main outcomes were found when clustering coefficient was tested in the model. See Tables \@ref(tab:table-model-output) and \@ref(tab:table-real-sim). The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, but this time there was a significant effect for age: clustering coefficient values decreased over time, suggesting that systematicity became weaker in the data as vocabulary grew. This is contrary to predictions set out above, and contrasts with findings from network growth models testing the exact same data set in Laing [-@laing_phonological_2023].
+The same main outcomes were found when clustering coefficient was tested in the model. See Tables \@ref(tab:table-model-output) and \@ref(tab:table-real-sim). The Real data had a significantly higher clustering coefficient than the random Simulated data, but this was significantly lower than that of the small-world Simulated data. Again there was no effect for corpus on the data, but this time there was a significant effect for age: clustering coefficient values increased over time, suggesting that systematicity became stronger in the data over time. However, a significant effect for network size contradicts this; with each additional word added to the network, clustering coefficient decreases by `r cc_nodes.beta`%. 
 
 ### Actual vs. Target data
-The differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a highly systematic small-world network. To further interrogate systematicity within the data, network properties of the Real (Actual) data were compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and clustering within a "standard" phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the data set. We would expect that mean path length and clustering coefficient would each show higher systematicity in the Actual network than the Target network[^2]. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect.
+The differences between the Real data and the small-world Simulated data are difficult to interpret, given that there is no clear model of what phonological systematicity would look like in a highly systematic small-world network. To further interrogate systematicity within the data, network properties of the Real (Actual) data were compared to the Real Target data. Target data serves as an appropriate proxy for connectivity and clustering within a "standard" phonological network, albeit a network that is constrained by words produced in early acquisition, and further constrained by the fact that only a subset of these (i.e. CDI words) are included in the data set. We would expect that mean path length and clustering coefficient would each show higher systematicity in the Actual network than the Target network[^2]. Basic model structure was the same as reported above, but with only Real data (Actual vs. Target) considered as a fixed effect. Network size improved model fit for both dependent variables and so was included in both models.
 
 [^2]: Note that this result was observed for network growth models in Laing [-@laing_phonological_2023], whereby the Actual network was found to be a better predictor of learning based on the known network of each child.
 
 ```{r data type - mean path length, message=FALSE, warning=FALSE, include=FALSE}
 
-MPL.DT <- lmerTest::lmer(path_length ~ data_type + corpus + age + (1+age|Speaker),
-                                             data=subset(SWD_red,
+MPL.DT <- lmerTest::lmer(path_length ~ data_type + corpus + age + numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red, 
                                                              data_type %in% c("actual", "target")
                                                            ),
                                        REML=FALSE)
 #summary(MPL.DT)
 
-MPL.DT.0 <- lmerTest::lmer(path_length ~ corpus + age + (1+age|Speaker),
+MPL.DT.0 <- lmerTest::lmer(path_length ~ corpus + age + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
                                                              data_type %in% c("actual", "target")
                                                            ),
@@ -306,23 +306,24 @@ MPL.DT_tab <- model.summary.MPL.DT$coefficients %>%
   mutate(Effect = fct_recode(Effect,
                              "Actual vs. Target" = "Data typetarget",
                              "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
-                             "Corpus" = "CorpusFrench")) %>%
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes")) %>%
   dplyr::select(Effect, beta, SE, t, p)
 
 ```
 
-There was a significant effect for data type on mean path length. See Table \@ref(tab:table-model-output). Model outputs revealed that Target data had a significantly higher mean path length than Actual data (see Table \@ref(tab:table-actual-target and Figure \@ref(fig:Figure-path-length-DT). Again there was no effect for corpus, but age significantly affected mean path length, which increased as age increased, again indicating an unexpected decrease in systematicity over time. 
+There was a significant effect for data type on mean path length. See Table \@ref(tab:table-model-output). Model outputs revealed that Target data had a significantly higher mean path length than Actual data (see Table \@ref(tab:table-actual-target and Figure \@ref(fig:Figure-path-length-DT). This time there was a significant effect for corpus, whereby the French data had a higher mean path length than the English data overall. Network size, but not age, significantly affected mean path length, which increased as network size increased, indicating a decrease in systematicity over time. 
 
 ```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
 
-CC.DT <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age + (1+age|Speaker),
+CC.DT <- lmerTest::lmer(clust_coef_avg ~ data_type + corpus + age + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
                                                              data_type %in% c("actual", "target")
                                                            ),
                                        REML=FALSE)
 #summary(CC.DT)
 
-CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + (1+age|Speaker),
+CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + numNodes + (1+age|Speaker),
                                              data=subset(SWD_red,
                                                              data_type %in% c("actual", "target")
                                                            ),
@@ -343,7 +344,7 @@ CC.DT_tab <- model.summary.CC.DT$coefficients %>%
     Effect=papaja:::beautify_terms(rownames(.))
   ) %>%
   printnum(
-    digits=c(3, 2, 2, 3)
+    digits=c(4, 2, 2, 3)
     , gt1=c(TRUE, TRUE, TRUE, TRUE)
     , zero=c(TRUE, TRUE, TRUE, TRUE)
   ) %>%
@@ -355,12 +356,15 @@ CC.DT_tab <- model.summary.CC.DT$coefficients %>%
   mutate(Effect = fct_recode(Effect,
                              "Actual vs. Target" = "Data typetarget",
                              "Real vs. Erdős–Rényi" = "Data typeErdos Renyi",
-                             "Corpus" = "CorpusFrench"))%>%
+                             "Corpus" = "CorpusFrench",
+                             "Network size" = "NumNodes"))%>%
   dplyr::select(Effect, beta, SE, t, p)
+
+cc_nodes_DT.beta <- abs((subset(CC.DT_tab, Effect == "Network size")$beta)*100)
 
 ```
 
-The effect of data type on clustering coefficient was also significant, in line with predictions, and findings from Laing [-@laing_phonological_2023]. Mean clustering coefficient was significantly lower in Target vs. Actual data. See Figure \@ref(fig:Figure-clust-coef-DT). Mean clustering coefficient decreased as age and network size increased, again indicating decreased systematicity over time.
+The effect of data type on clustering coefficient was also significant. Mean clustering coefficient was significantly lower in Target compared with Actual data. See Figure \@ref(fig:Figure-clust-coef-DT). The French data had a significantly lower mean clustering coefficient than the English data. Again, there was a significant effect for network size, but this was in the opposite direction as reported above for mean path length. As new words were acquired in the network, mean clustering coefficient increased by `r cc_nodes_DT.beta`%, indicating an increase in systematicity over time.
 
 ```{r model outputs, include=FALSE}
 
@@ -379,9 +383,8 @@ table.model.output <- rbind(MPL_anova, MPL.DT_anova, CC_anova, CC.DT_anova) %>%
   dplyr::select(Model, `Df`, `Chisq`, `p`)
 
 add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
-add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
 
-MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
+MPL_tab <- bind_rows(MPL_tab, add_data1)
 
 real_v_sim <- cbind(MPL_tab, CC_tab)
 rownames(real_v_sim) <- NULL
@@ -530,13 +533,15 @@ the difference between Actual and Target forms was significant.")
 
 # Discussion
 
-This paper set out to test the presence of systematicity in infants' developing lexicon by analysing phonological network graphs from nine infants acquiring French or English. Network graphs allow a close-up view of how similar phonological forms are to one another within the network (mean path length) and the extent to which groups of phonologically similar forms cluster together within the network (average clustering coefficient). Systematicity in the network would be reflected in shorter distance between forms and higher clusters of phonologically similar forms.
+This paper set out to test the presence of systematicity in infants' developing lexicon by analysing phonological network graphs from nine infants acquiring French or English. Network graphs allow a close-up view of phonological similarity between forms within the network (via mean path length) and the extent to which groups of phonologically similar forms cluster together within the network (via average clustering coefficient). Systematicity in the network would be reflected in shorter distance between forms and higher clusters of phonologically similar forms.
 
-I first tested whether systematicity could be observed in the data through the analysis of network graphs, following on from previous work [@laing_phonological_2023] where I found that network growth algorithms could predict word learning based on the fact that newly-acquired words were phonologically similar to known words in the lexicon. These findings were supported in the present analysis: when compared with a randomly-generated network of equal size, the phonological networks were found to be structured in a significantly more systematic way, in terms of both mean path length and clustering coefficient.
+In previous work [@laing_phonological_2023] I found that network growth algorithms could predict word learning; words were more likely to be learned when they were similar to the most well-connected words in the existing network. This outcome lends support to the hypothesis that early word production is phonologically systematic. Here, an analysis of the networks themselves revealed complimentary findings: when compared with a randomly-generated network of equal size, the phonological networks were found to be structured in a significantly more systematic way, in terms of both mean path length and clustering coefficient. Words were phonologically more similar and formed denser clusters than we would expect by chance.
 
-However, when the phonological networks were compared with a prototypical 'small-world' network, which possesses a highly systematic structure by design [@watts_collective_1998], both mean path length and clustering coefficient were found to be less systematic than the prototypical model. To interrogate this further, a follow-up analysis comparing infants' Actual productions with the Target forms was conducted. This allowed an analysis of network properties based on an 'adult' model, as opposed to a prototypical model of systematicity that does not necessarily reflect real-world linguistic phenomena. Indeed, in this analysis infants' productions were found to be more systematic across both measures than we would expect from an analysis of Target forms alone, again supporting findings above, as well as initial predictions.
+However, when the phonological networks were compared with a prototypical 'small-world' network, which possesses a highly systematic structure by design [@watts_collective_1998], both mean path length and clustering coefficient were found to be less systematic than the prototypical model. To interrogate this further, a follow-up analysis comparing infants' Actual productions with the Target forms was conducted. This allowed a consideration of network properties based on an 'adult' model, as opposed to a prototypical model of systematicity that does not necessarily reflect real-world linguistic phenomena (or indeed a random network, that may also not be a suitable comparison for the non-random distributions that occur in language). In this follow-up analysis, infants' productions were found to be more systematic across both measures than we would expect from an analysis of Target forms alone, consolidating findings reported above and lending further support to initial predictions.
 
-One surprising outcome of this analysis was the *decrease* in systematicity over time. Contrary to predictions set out above, mean path length increased over time, and clustering coefficient decreased, indicating more sparsely-distributed forms in the network. This is also in direct contrast with findings from Laing [-@laing_phonological_2023]. However, it is possible that this outcome is an artifact of the data: as network size increases, it seems plausible that we would also expect the magnitude of the network properties under investigation to increase in size. While many nodes may still be closely-connected (via low mean path length) and tightly-clustered (via high clustering coefficient), the acquisition of new forms that are likely to increase the phonological variability of the network no doubt sway these measures towards higher and lower average values, respectively. 
+One surprising outcome of this analysis was the *decrease* in systematicity over time. Contrary to predictions set out above, mean path length increased over time, and clustering coefficient decreased, indicating more sparsely-distributed forms in the network. This is also in direct contrast with findings from Laing [-@laing_phonological_2023], who found that systematicity increased over time (indexed by an age-related increase in accuracy of model predictions). 
+
+However, it is possible that this outcome is an artifact of the data: as network size increases, it seems plausible that we would also expect the magnitude of the network properties under investigation to increase in size. While many nodes may still be closely-connected (via low mean path length) and tightly-clustered (via high clustering coefficient), the acquisition of new forms that are likely to increase the phonological variability of the network no doubt sway these measures towards higher and lower average values, respectively. 
 
 The second analysis tested whether or not a period of word sele
 

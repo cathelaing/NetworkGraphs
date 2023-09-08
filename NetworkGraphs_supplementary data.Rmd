@@ -1,0 +1,333 @@
+---
+title: "NetworkGraphs"
+author:
+- name: Catherine E. Laing
+  affiliation: '1'
+  corresponding: yes
+  address: Department of Language and Linguistic Science, University of York, Heslington, YO10 5DD.
+  email: catherine.laing@york.ac.uk
+authornote: |
+ All code and associated data for this manuscript can be found at https://github.com/cathelaing/NetworkGraphs. Data provided in the PhonBank corpus was collected through support from grant number NIH-NICHHD RO1-HD051698. 
+shorttitle: Network graphs of early phonological development
+output:
+  papaja::apa6_pdf: default
+  #extra_dependencies: ["float"]
+  #papaja::apa6_word: default
+abstract: "ADD."
+keywords: systematicity, phonological development, preferential attachment, networks analysis
+#wordcount: "" 
+bibliography: Systematicity.bib
+#floatsintext: yes
+figsintext: no
+figurelist: yes
+tablelist: no
+footnotelist: no
+linenumbers: no
+numbersections: false
+mask: no
+draft: no
+documentclass: apa6
+header-includes:
+-  \DeclareDelayedFloatFlavor{kableExtra}{table}
+- \usepackage{tipa}
+#- \newfontfamily\PF{Arial}
+classoption: man
+affiliation:
+- id: '1'
+  institution: University of York, York, UK
+latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+
+source("prelims.R")
+r_refs(file="r-references.bib")
+#tinytex::install_tinytex()
+
+my_citations <- cite_r(
+  file="r-references.bib"
+  , pkgs=c("tidyverse", "igraph", "papaja", "lmerTest")
+  , withhold=FALSE
+  , footnote=TRUE
+)
+
+# load files
+
+SWD_red <- globalsmallworlddata[which(complete.cases(globalsmallworlddata[
+  ,c('path_length', 'clust_coef_global', 'clust_coef_avg', 'mean_k')])),]
+
+stat_sum_df <- function(fun, geom="crossbar", ...) {
+  stat_summary(fun.data=fun, colour="red", geom=geom, width=0.2, ...)
+}
+
+source("NetworkGraphs-Figures.R")
+
+```
+
+# S1: Testing model fit
+
+### Mean Path Length
+
+```{r mean path length, message=FALSE, warning=FALSE, include=FALSE}
+
+MPL.0 <- lmerTest::lmer(path_length ~ corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+MPL.1 <- lmerTest::lmer(path_length ~ corpus + age + numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+MPL_anova <- anova(MPL.1, MPL.0) # numNodes does not improve fit
+
+```
+
+### Clustering coefficient
+
+```{r clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+CC.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+CC.1 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "WS_actual", "Erdos_Renyi")
+                                                           ),
+                                       REML=FALSE)
+
+CC_anova <- anova(CC.0, CC.1) # numNodes improves fit
+
+```
+### Data type: Mean path length
+
+```{r data type - mean path length, message=FALSE, warning=FALSE, include=FALSE}
+
+MPL.DT.0 <- lmerTest::lmer(path_length ~ corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+MPL.DT.1 <- lmerTest::lmer(path_length ~ corpus + age + numNodes +(1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+MPL.DT_anova <- anova(MPL.DT.0, MPL.DT.1) # numNodes improves fit
+
+```
+
+### Data type: Clustering coefficient
+
+```{r data type - clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
+
+CC.DT.0 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+#summary(CC.DT)
+
+CC.DT.1 <- lmerTest::lmer(clust_coef_avg ~ corpus + age + numNodes + (1+age|Speaker),
+                                             data=subset(SWD_red,
+                                                             data_type %in% c("actual", "target")
+                                                           ),
+                                       REML=FALSE)
+
+CC.DT_anova <- anova(CC.DT.0, CC.DT.1) # numNodes improves fit
+
+```
+
+
+
+```{r model outputs, include=FALSE}
+
+table.model.output <- rbind(MPL_anova, MPL.DT_anova, CC_anova, CC.DT_anova) %>%
+  rownames_to_column(var="Model") %>%
+  filter(Chisq > 0) %>%
+  rename(#"PA Df"="Df",
+         #"PA Chisq"="Chisq",
+         "p"=`Pr(>Chisq)`) %>%
+  mutate(Model=fct_recode(Model,
+                           "Mean Path Length (Real vs. Simulated)"="MPL",
+                            "Clustering Coefficient (Real vs. Simulated)"="CC",
+                            "Mean Path Length (Actual vs. Target)"="MPL.DT",
+                            "Clustering Coefficient (Actual vs. Target)"="CC.DT"),
+             p=scales::pvalue(p)) %>%
+  dplyr::select(Model, `Df`, `Chisq`, `p`)
+
+add_data1 <- data.frame(Effect = "Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+add_data2 <- data.frame(Effect = "Age * Network size", beta = NA, SE = NA, t = NA, p = NA, row.names = "added")
+
+MPL_tab <- bind_rows(MPL_tab, add_data1, add_data2)
+
+real_v_sim <- cbind(MPL_tab, CC_tab)
+rownames(real_v_sim) <- NULL
+actual_v_target <- cbind(MPL.DT_tab, CC.DT_tab)
+rownames(actual_v_target) <- NULL
+
+
+actual_v_target[6] <- NULL
+real_v_sim[6] <- NULL
+
+```
+
+```{r table-model-output, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from nested model comparisons testing the effect of data type (Real vs. Simulated and Actual vs. Target on mean path length and clustering coefficient."
+knitr::kable(table.model.output, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  kable_styling()%>%
+  row_spec(4, hline_after=T)
+
+```
+
+```{r table-real-sim, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient."
+knitr::kable(real_v_sim, "latex", booktabs=T, longtable=T, caption=cap, digits=3, align="c") %>%
+  add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
+    kable_styling()
+```
+
+```{r table-actual-target, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
+cap="Outputs from linear regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient."
+knitr::kable(actual_v_target, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c") %>%
+  add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
+    kable_styling()
+```
+
+```{r Figure-path-length-DT, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_plot_DT)
+cap <- sprintf("Change in mean path length over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+```{r Figure-path-length-all, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_plot)
+cap <- sprintf("Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+```{r Figure-clust-coef-DT, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(clust_coef_plot_DT)
+cap <- sprintf("Change in mean clustering coefficient over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+```{r Figure-clust-coef-all, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(clust_coef_plot)
+cap <- sprintf("Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
+
+
+## RQ2. Is there evidence of word selection and adaptation in the dataset?
+
+To address the second research question, the phonological distance between Target and Actual forms was taken as a proxy of word selection and adaptation. That is, if a word is produced in a target-like way (i.e. assumed to be selected[^3]), then the phonological distance between the Target form and the way it is produced (Actual form) should be low. The opposite is true for adapted forms, as we expect, by definition, a non-target-like production and thus a higher distance between Target and Actual form. This measure is not perfect, but coding selected/adapted forms in the data would otherwise have to be done by hand, which is not feasible across such a large dataset. Following Vihman's [REF] framework, we would expect low distance been Actual and Target forms earlier on in development, and higher distance later. To test this, I drew on generalized additive mixed effects models (GAMMs), since these allow the analysis of non-linear change over time, and can account for statistical differences between two non-linear trajectories of data that may differ in non-linear ways [@soskuthy_generalised_2017; @wieling_analyzing_2018].
+
+[^3]: though note that, while a selected form is, by definition, target-like in phonological form, a target-like form isn't necessarily a selected form.
+
+First, generalised linear mixed effects models, or GAMMs, were used to examine connectivity of the infants' Actual and Target networks and how these changed over time. These were run using the *mgcv()* package in R [@R-mgcv_a]. These models analyse the extent to which the two networks differ (or not) from one another across infants, and how this changes non-linearly month-by-month. Fixed effects in the model can include parametric terms, as is typical in regression modelling, and also *smooth terms*, or non-linear fixed effects. Much like mixed-effects linear models, GAMMs can account for random effects in the data; in this case by-subject random effects were included through the addition of *random smooths* in the model.
+
+The model tested number of connections in the network (*mean k*) as the dependent variable, working on the assumption that connectivity in the Target vs. Actual networks would be similar during periods of word selection, and would differ during periods of adaptation. Specifically, periods of adaptation should lead to higher connectivity in the Actual network than the Target network, since we expect productions to be more similar (and thus more well-connected) in Actual forms; we would expect connectivity across data types to diverge at the point that word adaptation begins to take hold. A higher number of connections (higher mean k) for Actual vs. Target networks is expected during periods of adaptation, and no difference in connectivity is expected for periods of selection. Data type (Actual vs. Target) and corpus (English vs. French) were included as parametric terms, with data type being the variable of interest in the model. Network size and age were included as smooth terms, as well as by-subject and by-data type random smooths for the effect of age, which account for by-subject and by-data type differences in the data over time. 
+
+To account for the fact that adjacent values (i.e. connectivity at month *n* and month *n+1*) are likely correlated, GAMM modelling includes an autocorrelation parameter; see Sóskuthy [-@soskuthy_generalised_2017] and Wieling [-@wieling_analyzing_2018] for full details. Additionally, the start point for each infant’s data (i.e. their first recording session) was indexed in the model. To test for an effect of data type, model comparisons were run using the *compareML()* function from the *itsadug()* package [@R-itsadug]: the full model including the effect of data type and the by-data type random smooth was compared to a model without these terms. Because model summaries for GAMM smooths may be non-conservative (*Sóskuthy, 2017*), smooth plots will be observed alongside any significant effects to determine relevant trends in the data.
+
+```{r GAMMs set up}
+
+SWD_red$start.event <- SWD_red$session_ordinal == 1 
+
+globalthresholds$start.event <- globalthresholds$threshold == 0.01
+
+# create dummy variable for actual vs. target 
+
+globalthresholds$IsActual <- (globalthresholds$data_type == "actual")*1
+
+```
+
+```{r GAMMs - mean k ~ data type, include=FALSE}
+
+meank.gamm.base <- bam(mean_k ~ 
+                          data_type +
+                          corpus +
+                            s(numNodes, bs = "cr")  +
+                          s(age, bs = "cr") +                       
+                          s(age, by=Speaker, bs="cr"),
+                        dat=subset(SWD_red, data_type %in% c("actual", "target")), method="ML")
+
+rmeank <- start_value_rho(meank.gamm.base) 
+
+meank.gamm.1 <- bam(mean_k ~ 
+                      data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") + 
+                       s(age, data_type, bs="fs", m=1, k=2) + 
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                     rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.gamm.0 <- bam(mean_k ~ 
+                      #data_type +
+                      corpus +
+                      s(numNodes, bs = "cr")  +
+                      s(age, bs = "cr") +     
+                     # s(age, data_type, bs="fs", m=1, k=2) + 
+                      s(age, Speaker, bs="fs", m=1, k=9),  
+                    dat=subset(SWD_red, data_type %in% c("actual", "target")), method = "ML", 
+                    rho=rmeank, AR.start=subset(SWD_red, data_type %in% c("actual", "target"))$start.event)
+
+meank.diff <- compareML(meank.gamm.1, meank.gamm.0)
+meank.diff.prep <- meank.diff$table
+
+meank.diff <- meank.diff.prep %>%
+  filter(Model == "meank.gamm.1") %>%
+  rename(
+    "p" = "p.value"
+  ) %>%
+  mutate(Model = fct_recode(Model,
+                            "Mean connectivity (Actual vs. Target)" = "meank.gamm.1")) %>%
+  dplyr::select(Model, Df, Difference, p) 
+
+
+```
+
+Model comparisons revealed a significant effect for data type on connectivity in the networks over time. See Table \@ref(tab:table-GAMM-outputs). Figure \@ref(fig:difference-plot-mean-k) shows the difference between Actual and Target connectivity over the course of development. The red line indicates periods of significant difference, showing that Actual vs. Target connectivity was significantly different throughout the period of analysis; Actual forms were always more well-connected than Target forms. This contrasts with the expectations set out above. However, Figure \@ref(fig:difference-plot-mean-k) clearly shows an increase in the difference in connectivity between Actual and Target forms over the period of data collection, supporting the expectation that Target and Actual forms are more similar earlier on in development, and implying that word selection takes place earlier on in the data, likely with some words being produced in a more target-like way than others. 
+
+```{r table-GAMM-outputs, echo=FALSE, message=FALSE, warning=FALSE}
+cap="Outputs from nested model comparisons of GAMMs testing the effect of data type (Actual vs. Target) on number of connections in the network. Model comparisons compared full models against those without parametric and smooth terms that included data type."
+kable(meank.diff, "latex", booktabs=T, longtable=T, caption=cap, digits=2, align="c",
+    kable_styling()
+```
+
+```{r difference-plot-mean-k, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE,results='hide',fig.keep='all'}
+plot_diff(meank.gamm.1, view="age", comp=list(data_type=c("target","actual")),
+          # main = "Figure 3",
+          # ylab = "Est. difference in scaled PAT values",
+          xlab = "Age (months)",
+          xlim = c(10,30),
+          hide.label = TRUE)
+
+cap <- sprintf("Difference smooth plot showing difference between connectivity (mean k) in Actual vs. Target forms from the GAMM model specified above. Shaded area shows 95%% confidence intervals, red line along x-axis indicates months in which
+the difference between Actual and Target forms was significant.")
+```
+
+# Discussion
+
+This paper set out to test the presence of systematicity in infants' developing lexicon by analysing phonological network graphs from nine infants acquiring French or English. Network graphs allow a close-up view of phonological similarity between forms within the network (via mean path length) and the extent to which groups of phonologically similar forms cluster together within the network (via average clustering coefficient). Systematicity in the network would be reflected in shorter distance between forms and higher clusters of phonologically similar forms.
+
+In previous work [@laing_phonological_2023] I found that network growth algorithms could predict word learning; words were more likely to be learned when they were similar to the most well-connected words in the existing network. This outcome lends support to the hypothesis that early word production is phonologically systematic. Here, an analysis of the networks themselves revealed complimentary findings: when compared with a randomly-generated network of equal size, the phonological networks were found to be structured in a significantly more systematic way, in terms of both mean path length and clustering coefficient. Words were phonologically more similar and formed denser clusters than we would expect by chance.
+
+However, when the phonological networks were compared with a prototypical 'small-world' network, which possesses a highly systematic structure by design [@watts_collective_1998], both mean path length and clustering coefficient were found to be less systematic than the prototypical model. To interrogate this further, a follow-up analysis comparing infants' Actual productions with the Target forms was conducted. This allowed a consideration of network properties based on an 'adult' model, as opposed to a prototypical model of systematicity that does not necessarily reflect real-world linguistic phenomena (or indeed a random network, that may also not be a suitable comparison for the non-random distributions that occur in language). In this follow-up analysis, infants' productions were found to be more systematic across both measures than we would expect from an analysis of Target forms alone, consolidating findings reported above and lending further support to initial predictions.
+
+One surprising outcome of this analysis was the *decrease* in systematicity over time. Contrary to predictions set out above, mean path length increased over time, and clustering coefficient decreased, indicating more sparsely-distributed forms in the network. This is also in direct contrast with findings from Laing [-@laing_phonological_2023], who found that systematicity increased over time (indexed by an age-related increase in accuracy of model predictions). 
+
+However, it is possible that this outcome is an artifact of the data: as network size increases, it seems plausible that we would also expect the magnitude of the network properties under investigation to increase in size. While many nodes may still be closely-connected (via low mean path length) and tightly-clustered (via high clustering coefficient), the acquisition of new forms that are likely to increase the phonological variability of the network no doubt sway these measures towards higher and lower average values, respectively. 
+
+The second analysis tested whether or not a period of word sele
+
+Indeed, findings from the second research question illustrate this point more clearly. Using Generalized Linear Additive Mixed Models (GAMMs), which allow for a clearer analysis of change over time, a convincing case for systematicity over the course of the analysis period. These models were used to compare the connectivity of the Actual network tested above in relation to the adult Target network. Higher connectivity (higher *mean k*) indicates 
+
+
+
