@@ -3,28 +3,14 @@
 
 \centering
 \includegraphics{NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf}
-\caption{\label{fig:Figure-path-length-DT}Change in mean path length over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
-\end{figure*}
-\begin{figure*}[hbt]
-\ifnextchar[{\eatarg}{}
-
-\centering
-\includegraphics{NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf}
-\caption{\label{fig:Figure-path-length-all}Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdos--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-path-length-DT}Change in mean path length as network size increases, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 \centering
 \includegraphics{NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf}
-\caption{\label{fig:Figure-clust-coef-DT}Change in mean clustering coefficient over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
-\end{figure*}
-\begin{figure*}[hbt]
-\ifnextchar[{\eatarg}{}
-
-\centering
-\includegraphics{NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf}
-\caption{\label{fig:Figure-clust-coef-all}Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdos--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-clust-coef-DT}Change in mean clustering coefficient as network size increases, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}

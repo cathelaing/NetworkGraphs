@@ -64,7 +64,9 @@ source("NetworkGraphs-Figures.R")
 
 ```
 
-# S1: Testing model fit
+# S1: Establishing connectivity in the networks
+
+# S2: Testing model fit
 
 ### Mean Path Length
 
@@ -145,7 +147,16 @@ CC.DT_anova <- anova(CC.DT.0, CC.DT.1) # numNodes improves fit
 
 ```
 
+```{r Figure-path-length-all, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(path_length_plot)
+cap <- sprintf("Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
 
+
+```{r Figure-clust-coef-all, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
+plot(clust_coef_plot)
+cap <- sprintf("Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+```
 
 ```{r model outputs, include=FALSE}
 
