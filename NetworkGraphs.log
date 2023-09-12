@@ -1,13 +1,13 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.7.19)  19 JUL 2023 18:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  12 SEP 2023 18:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **NetworkGraphs.tex
 (./NetworkGraphs.tex
 LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-06-30>
+L3 programming layer <2023-08-29>
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/apa6/apa6.cls
-Document Class: apa6 2020/01/13 v2.34 APA formatting (6th edition)
+Document Class: apa6 2023/08/07 v2.35 APA formatting (6th edition)
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size12.clo
@@ -105,7 +105,15 @@ File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen149
 \Gin@req@width=\dimen150
-) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+))) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen151
 \lightrulewidth=\dimen152
@@ -139,9 +147,9 @@ Package: threeparttable 2003/06/13  v 3.0
 \b@level@five@skip=\skip58
 \e@level@five@skip=\skip59
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2023/03/12 v3.6j Customizing captions (AR)
+Package: caption 2023/07/31 v3.6n Customizing captions (AR)
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen164
 \captionmargin=\dimen165
 \caption@leftmargin=\dimen166
@@ -303,7 +311,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count289
 \calc@Cskip=\skip80
 ) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2023/07/15 v3.92 The Babel package
+Package: babel 2023/08/29 v3.93 The Babel package
 \babel@savecnt=\count290
 \U@D=\dimen183
 \l@unhyphenated=\language3
@@ -313,7 +321,7 @@ Package: babel 2023/07/15 v3.92 The Babel package
 Package babel Info: You haven't specified a language as a class or package
 (babel)             option. I'll load 'nil'. Reported on input line 4285.
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
-Language: nil 2023/07/15 v3.92 Nil language
+Language: nil 2023/08/29 v3.93 Nil language
 \l@nil=\language4
 ))
 \everypar=\toks26
@@ -384,7 +392,7 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 Failed to patch abstract.
 Failed to patch title.
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xpatch/xpatch.sty (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2023-06-30 L3 programming layer (loader) 
+Package: expl3 2023-08-29 L3 programming layer (loader) 
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count299
@@ -392,7 +400,7 @@ File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 ))
 Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2023-02-02 L3 Experimental document command parser
+Package: xparse 2023-08-29 L3 Experimental document command parser
 )) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2022-09-14 v5.2n context-sensitive quotations (JAW)
 \csq@reset=\count300
@@ -458,9 +466,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmss on input line 35
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )))) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2023-07-08 v7.01b Hypertext links for LaTeX
-(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
-) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
@@ -468,8 +474,6 @@ Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
-Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
 ) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 ) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
@@ -484,11 +488,7 @@ Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 Package: nameref 2023-08-07 v2.53 Cross-referencing by name of section
 (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-) (c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
-Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
-(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
-Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
-))
+)
 \c@section@level=\count308
 )
 \@linkdim=\dimen193
@@ -682,99 +682,82 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ] [2]
 Underfull \vbox (badness 1838) has occurred while \output is active []
 
-[3]
+[3] [4] [5]
 Underfull \vbox (badness 7649) has occurred while \output is active []
 
-[4]
+[6] [7] [8]
 Underfull \vbox (badness 7649) has occurred while \output is active []
 
-[5] [6] [7] [8]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 266.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 266.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 266.
 [9]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 272.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 272.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 272.
+[10]
+Underfull \vbox (badness 2189) has occurred while \output is active []
 
-[10] [11] [12]
+[11] [12] [13]
 \openout3 = `NetworkGraphs.ttt'.
 
 (NetworkGraphs.ttt)
 \openout4 = `NetworkGraphs.fff'.
 
-(NetworkGraphs.fff) [13] [14]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 389.
-(c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (42.77023pt too wide) in paragraph at lines 395--395
-[]\T1/lmtt/m/n/12 ## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-[] 
- []
+(NetworkGraphs.fff) [14] [15]
 
+LaTeX Warning: Reference `tab:table-GAMM-outputs' on page 16 undefined on input line 378.
 
-Overfull \hbox (42.77023pt too wide) in paragraph at lines 395--395
-[]\T1/lmtt/m/n/12 ## Warning in gam.side(sm, X, tol = .Machine$double.eps^0.5): model has repeated 1-[] 
- []
+[16] [17]
+Underfull \vbox (badness 7649) has occurred while \output is active []
 
+[18]
+Underfull \vbox (badness 8000) has occurred while \output is active []
 
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 412--412
-[]\T1/lmtt/m/n/12 ## meank.gamm.1: mean_k ~ data_type + corpus + s(numNodes, bs = "cr") + s(age,[] 
- []
+[19] [20]
+Underfull \vbox (badness 7649) has occurred while \output is active []
 
-
-Overfull \hbox (18.07022pt too wide) in paragraph at lines 412--412
-[]\T1/lmtt/m/n/12 ## meank.gamm.0: mean_k ~ corpus + s(numNodes, bs = "cr") + s(age, bs = "cr") +[] 
- []
-
-[15]
-
-LaTeX Warning: Reference `tab:table-GAMM-outputs' on page 16 undefined on input line 414.
-
-[16]
+[21]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[17]
+[22]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[18] [19] AED endfloat: Processing end Figures and Tables (./NetworkGraphs.ttt [20
+[23]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[24] [25] AED endfloat: Processing end Figures and Tables (./NetworkGraphs.ttt [26
 
 
 
-] [21
+]
+Overfull \hbox (6.37228pt too wide) in alignment at lines 15--30
+ [] [] [] [] [] [] [] [] [] 
+ []
 
-]) [22
+[27
+
+]) [28
 
 ] (./NetworkGraphs.fff
-<NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf, id=258, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf, id=293, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>
 Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf  used on input line 5.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf, id=259, 469.755pt x 325.215pt>
-File: NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf Graphic file (type pdf)
-<use NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf  used on input line 12.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf, id=260, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf, id=294, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf  used on input line 19.
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf  used on input line 12.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf, id=261, 469.755pt x 325.215pt>
-File: NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf Graphic file (type pdf)
-<use NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf  used on input line 26.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf, id=262, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf, id=295, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf  used on input line 33.
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf  used on input line 19.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-) [23
+) [29
 
- <./NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>] [24 <./NetworkGraphs_files/figure-latex/Figure-path-length-all-1.pdf>] [25 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>] [26 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-all-1.pdf>] [27 <./NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>] (./NetworkGraphs.aux)
+ <./NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>] [30 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>] [31 <./NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>] (./NetworkGraphs.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -783,21 +766,21 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `NetworkGraphs.out' has not changed.
-(rerunfilecheck)             Checksum: 5DA9FC63CE9E2B4844FF0EA5725F7FD9;2743.
+(rerunfilecheck)             Checksum: 92737897BBE31E202862CB06C0747BD4;3161.
  ) 
 Here is how much of TeX's memory you used:
- 16808 strings out of 477196
- 272101 string characters out of 5811767
- 1929238 words of memory out of 5000000
- 37385 multiletter control sequences out of 15000+600000
- 634300 words of font info for 102 fonts, out of 8000000 for 9000
+ 16756 strings out of 476893
+ 270189 string characters out of 5807518
+ 1930801 words of memory out of 5000000
+ 37636 multiletter control sequences out of 15000+600000
+ 633982 words of font info for 101 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,12n,79p,2224b,658s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on NetworkGraphs.pdf (27 pages, 275132 bytes).
+ 72i,11n,79p,2638b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
+Output written on NetworkGraphs.pdf (31 pages, 242691 bytes).
 PDF statistics:
- 382 PDF objects out of 1000 (max. 8388607)
- 325 compressed objects within 4 object streams
- 100 named destinations out of 1000 (max. 500000)
- 146 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 386 PDF objects out of 1000 (max. 8388607)
+ 331 compressed objects within 4 object streams
+ 108 named destinations out of 1000 (max. 500000)
+ 136 words of extra memory for PDF output out of 10000 (max. 10000000)
 
