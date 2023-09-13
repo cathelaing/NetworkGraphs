@@ -2,6 +2,20 @@
 \ifnextchar[{\eatarg}{}
 
 \centering
+\includegraphics{NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf}
+\caption{\label{fig:Figure-path-length}Change in mean path length as network size increases, in Real vs.~Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf}
+\caption{\label{fig:Figure-clust-coef}Change in mean path length as network size increases, in Real vs.~Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
 \includegraphics{NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf}
 \caption{\label{fig:Figure-path-length-DT}Change in mean path length as network size increases, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
 \end{figure*}
