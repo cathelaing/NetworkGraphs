@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  12 SEP 2023 18:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  13 SEP 2023 11:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -698,23 +698,20 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [10]
 Underfull \vbox (badness 2189) has occurred while \output is active []
 
-[11] [12] [13]
-\openout3 = `NetworkGraphs.ttt'.
-
-(NetworkGraphs.ttt)
+[11]
 \openout4 = `NetworkGraphs.fff'.
 
-(NetworkGraphs.fff) [14] [15]
+(NetworkGraphs.fff) [12] [13]
+\openout3 = `NetworkGraphs.ttt'.
 
-LaTeX Warning: Reference `tab:table-GAMM-outputs' on page 16 undefined on input line 378.
+(NetworkGraphs.ttt) [14] [15]
+
+LaTeX Warning: Reference `tab:table-GAMM-outputs' on page 16 undefined on input line 390.
 
 [16] [17]
 Underfull \vbox (badness 7649) has occurred while \output is active []
 
-[18]
-Underfull \vbox (badness 8000) has occurred while \output is active []
-
-[19] [20]
+[18] [19] [20]
 Underfull \vbox (badness 7649) has occurred while \output is active []
 
 [21]
@@ -740,24 +737,34 @@ Overfull \hbox (6.37228pt too wide) in alignment at lines 15--30
 ]) [28
 
 ] (./NetworkGraphs.fff
-<NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf, id=293, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf, id=295, 469.755pt x 325.215pt>
+File: NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf Graphic file (type pdf)
+<use NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf>
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf  used on input line 5.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf, id=296, 469.755pt x 325.215pt>
+File: NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf Graphic file (type pdf)
+<use NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf>
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf  used on input line 12.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf, id=297, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf  used on input line 5.
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf  used on input line 19.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf, id=294, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf, id=298, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf  used on input line 12.
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf  used on input line 26.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf, id=295, 469.755pt x 325.215pt>
+<NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf, id=299, 469.755pt x 325.215pt>
 File: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf Graphic file (type pdf)
 <use NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>
-Package pdftex.def Info: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf  used on input line 19.
+Package pdftex.def Info: NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf  used on input line 33.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 ) [29
 
- <./NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>] [30 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>] [31 <./NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>] (./NetworkGraphs.aux)
+ <./NetworkGraphs_files/figure-latex/Figure-path-length-1.pdf>] [30 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-1.pdf>] [31 <./NetworkGraphs_files/figure-latex/Figure-path-length-DT-1.pdf>] [32 <./NetworkGraphs_files/figure-latex/Figure-clust-coef-DT-1.pdf>] [33 <./NetworkGraphs_files/figure-latex/difference-plot-mean-k-1.pdf>] (./NetworkGraphs.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -769,18 +776,18 @@ Package rerunfilecheck Info: File `NetworkGraphs.out' has not changed.
 (rerunfilecheck)             Checksum: 92737897BBE31E202862CB06C0747BD4;3161.
  ) 
 Here is how much of TeX's memory you used:
- 16756 strings out of 476893
- 270189 string characters out of 5807518
- 1930801 words of memory out of 5000000
- 37636 multiletter control sequences out of 15000+600000
+ 16776 strings out of 476893
+ 271219 string characters out of 5807518
+ 1929801 words of memory out of 5000000
+ 37652 multiletter control sequences out of 15000+600000
  633982 words of font info for 101 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,11n,79p,2638b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/cs524/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
-Output written on NetworkGraphs.pdf (31 pages, 242691 bytes).
+Output written on NetworkGraphs.pdf (33 pages, 260117 bytes).
 PDF statistics:
- 386 PDF objects out of 1000 (max. 8388607)
- 331 compressed objects within 4 object streams
- 108 named destinations out of 1000 (max. 500000)
- 136 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 416 PDF objects out of 1000 (max. 8388607)
+ 355 compressed objects within 4 object streams
+ 112 named destinations out of 1000 (max. 500000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
 
