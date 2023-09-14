@@ -15,7 +15,6 @@ output:
   #papaja::apa6_word: default
 abstract: "This paper explores the early lexicons of nine infants acquiring English or French to determine the extent of systematicity in the early vocabulary, and how this changes over time. Network graphs are generated from the point of first word production in the data set until age 30 months. Two measures of systematicity - mean path length and clustering coefficient - are analysed to establish the extent to which the early productive lexicon consists of closely-connected clusters of similar-sounding forms. Results show that early production is highly systematic when compared to random, prototypical and adult phonological networks, but that the network becomes more dispersed as it increases in size. Connectivity within the network is consistently higher for infants' actual productions when compared with the adult target forms, and this effect increases over time. This suggests a systematic approach to production over the course of early development."
 keywords: systematicity, phonological development, preferential attachment, networks analysis
-wordcount: no 
 bibliography: Systematicity.bib
 #floatsintext: yes
 figsintext: no
@@ -100,7 +99,7 @@ Extracted data was filtered to include only words featuring on the communicative
 
 To determine the structure of the network, the first step was to create distance values between each word and each other word in the network. This was first done using a 'global' network of all forms produced by the infant up to the final session at 2;6, to create a large distance matrix for each infant that incorporated all word productions. Essentially, this global network reflects the distance between every word and every other word in each child's productive vocabulary at 2;6. Distance values were established using methods set out in Monaghan et al. [-@monaghan_measures_2010], using distinctive features to generate a set of phonetic values for each word that could then be compared with all other words [note that only consonants were analysed, given that vowels are highly variable in early production and also very difficult to transcribe accurately, @donegan_normal_2013; @kent_what_2020]. Euclidean distance between the values of each word and each other word in each infant's global network was then used to determine how close/distant words were from one another. Often, infants produced multiple tokens of the same word type in a given month, often with high variability across tokens. Because it was not possible to generate networks with all tokens included (even with only single word types included, the final dataset for all nine infants includes over 5.5 million data points, once distance between each word and each other word is calculated), a mean value for each distinctive feature was established across tokens, meaning that each word's distinctive feature value represents the variability of the infant's production of a given word. This may not be a perfect measure, but it is more representative than taking, for example, the first instance of each word type.
 
-Distance scores were generated between each word and each other word in each child's dataset, for both Target and Actual forms. These scores were then normalised, and a normalised distance of 0.25 was chosen to indicate connectivity. That is, words were said to be connected in the network if their distance score was 0.25 or less. This accounted for the lower quartile of connectivity across the dataset. See Supplementary Materials (S1) for an overview of how this measure was established.
+Distance scores were generated between each word and each other word in each child's dataset, for both Target and Actual forms. These scores were then normalised, and a normalised distance of 0.25 was chosen to indicate connectivity. That is, words were said to be connected in the network if their distance score was 0.25 or less. This accounted for the lower quartile of connectivity across the dataset.
 
 ```{r data overview}
 types.corpus <- comparison_data %>%
@@ -150,7 +149,7 @@ Networks with high phonological systematicity should exhibit properties of proto
 
 To test RQ1, network graphs were compared to simulated small world and random networks of equivalent size to determine whether the data (the *Real* network, drawing from infants' Actual productions) differed from the *Simulated* networks. For both mean path length and clustering coefficient, we would expect the Real data to differ significantly from the Simulated Erdős–Rényi (random) network, and for the Real network to show similar properties to the Simulated Watts-Strogatz (small-world) network. Note that the extent of the expected statistical difference is not easy to predict here: if the Real network is very similar to the Watts-Strogatz network then no statistical difference would be expected, but this relies on the Real data being highly systematic, which may not be realistic. In order to fully understand the nature of the data, figures and model outputs will be inspected in relation to these predictions.
 
-The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as the dependent variable, respectively, each with Data type (Real vs. small-world vs. random), Corpus (English vs. French) and Age as fixed effects, and Subject as a random effect with a by-Subject random slope for the effect of age. Initial model comparisons showed that including Network size, alongside Age, improved fit in the model testing clustering coefficient, but not mean path length (see S2). Network size is thus included as a fixed effect in the clustering coefficient model only.
+The two measures will be discussed in turn. Models include mean path length or average clustering coefficient as the dependent variable, respectively, each with Data type (Real vs. small-world vs. random), Corpus (English vs. French) and Age as fixed effects, and Subject as a random effect with a by-Subject random slope for the effect of age. Initial model comparisons showed that including Network size, alongside Age, improved fit in the model testing clustering coefficient, but not mean path length (see Supplementary materials, S1, for model comparisons). Network size is thus included as a fixed effect in the clustering coefficient model only.
 
 ### Mean Path Length
 
@@ -205,10 +204,10 @@ MPL_tab <- model.summary.MPL$coefficients %>%
 
 ```{r Figure-path-length, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(path_length_plot)
-cap <- sprintf("Change in mean path length as network size increases, in Real vs. Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean path length as network size increases, in Real vs. Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95%% CIs. See S2 for the same data plotted according to the effect of Age.")
 ```
 
-Nested model comparisons revealed a significant effect for Data type on mean path length. See Table \@ref(tab:table-model-output). As shown in Table \@ref(tab:table-real-sim), the Real data had a significantly lower mean path length than the random Simulated data, as predicted. The difference between the Real data and the Simulated small world data was also significant, but the extent of this difference was smaller than for the comparison with the random network, thereby lending support to initial predictions. The extent of these effects is shown clearly in Figure \@ref(fig:Figure-path-length), where the comparison between the Real data and the random Simulated data is visually much wider than that of the Real vs. Simulated small-world network. Contrary to predictions, there was no change in systematicity over time (i.e. no effect of Age was observed). 
+Nested model comparisons revealed a significant effect for Data type on mean path length. See Table \@ref(tab:table-model-output). As shown in Table \@ref(tab:table-real-sim), the Real data had a significantly lower mean path length than the random Simulated data, as predicted. The difference between the Real data and the Simulated small world data was also significant, but the extent of this difference was smaller than for the comparison with the random network, thereby lending support to initial predictions. The extent of these effects is shown clearly in Figure \@ref(fig:Figure-path-length), where the comparison between the Real data and the random Simulated data is visually much wider than that of the Real vs. Simulated small-world network until the very end of the data collection period. Contrary to predictions, there was no change in systematicity over time (i.e. no effect of Age was observed). Plots showing the effect of age on the two variables can be found in the Supplementary Materials, S2. 
 
 ```{r clustering coefficient, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -266,7 +265,7 @@ cc_months.beta <- abs((subset(CC_tab, Effect == "Age")$beta)*100)
 
 ```{r Figure-clust-coef, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(clust_coef_plot)
-cap <- sprintf("Change in mean path length as network size increases, in Real vs. Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in clustering coefficient as network size increases, in Real vs. Simulated (random and small-world) data. Coloured lines represent Data type; coloured bands represent 95%% CIs. See S2 for the same data plotted according to the effect of Age.")
 ```
 
 ### Clustering coefficient
@@ -492,14 +491,14 @@ knitr::kable(all.models, "latex", booktabs=T, longtable=T, caption=cap, digits=2
 ```
 
 ```{r table-real-sim, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
-cap="Outputs from linear regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient."
+cap="Outputs from linear mixed effects regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient."
 knitr::kable(real_v_sim, "latex", booktabs=T, longtable=T, caption=cap, digits=4, align="c") %>%
   add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
     kable_styling()
 ```
 
 ```{r table-actual-target, echo=F, message=FALSE, warning=FALSE, comment=F, results="asis"}
-cap="Outputs from linear regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient."
+cap="Outputs from linear mixed effects regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient."
 knitr::kable(actual_v_target, "latex", booktabs=T, longtable=T, caption=cap, digits=4, align="c") %>%
   add_header_above(c(" "=1, "Mean path length"=4, "Clustering coefficient"=4)) %>%
     kable_styling()
@@ -507,12 +506,12 @@ knitr::kable(actual_v_target, "latex", booktabs=T, longtable=T, caption=cap, dig
 
 ```{r Figure-path-length-DT, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(path_length_plot_DT)
-cap <- sprintf("Change in mean path length as network size increases, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean path length as network size increases, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs. See S2 for the same data plotted according to the effect of Age.")
 ```
 
 ```{r Figure-clust-coef-DT, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(clust_coef_plot_DT)
-cap <- sprintf("Change in mean clustering coefficient as network size increases, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean clustering coefficient as network size increases, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs. See S2 for the same data plotted according to the effect of Age.")
 ```
 
 ## RQ2. Is there evidence of word selection and adaptation in the dataset?
@@ -525,7 +524,7 @@ First, GAMMs were used to examine connectivity of the infants' Actual and Target
 
 The model tested mean number of connections in the network (average number of connections of each node in the network, or *mean k*) as the dependent variable, working on the assumption that connectivity in the Target vs. Actual networks would be similar during periods of word selection (i.e. Actual and Target words are similar to one another and so distribution of connectivity should be similar), and would differ during periods of adaptation. Specifically, periods of adaptation should lead to higher connectivity in the Actual network than the Target network, since we expect productions to be more similar (and thus more well-connected) in Actual forms; we would expect connectivity across data types to diverge at the point that word adaptation begins to take hold. A higher number of connections (higher mean k) for Actual vs. Target networks is expected during periods of adaptation, and no difference in connectivity is expected for periods of selection. Data type (Actual vs. Target) and Corpus (English vs. French) were included as parametric terms, with Data type being the variable of interest in the model. Network size and Age were included as smooth terms, as well as by-Subject and by-Data type random smooths for the effect of Age, which account for by-Subject and by-Data type differences in the data over time. 
 
-To account for the fact that adjacent values (i.e. connectivity at month *n* and month *n+1*) are likely correlated, GAMM modelling includes an autocorrelation parameter; see Sóskuthy [-@soskuthy_generalised_2017] and Wieling [-@wieling_analyzing_2018] for full details. Additionally, the start point for each infant’s data (i.e. their first recording session) was indexed in the model. To test for an effect of Data type, model comparisons were run using the *compareML()* function from the *itsadug()* package [@R-itsadug]: the full model including the effect of Data type and the by-Data type random smooth was compared to a model without these terms. Because model summaries for GAMM smooths may be non-conservative (@soskuthy_generalised_2017), smooth plots will be observed alongside any significant effects to determine relevant trends in the data.
+To account for the fact that adjacent values (i.e. connectivity at month *n* and month *n+1*) are likely correlated, GAMM modelling includes an autocorrelation parameter; see Sóskuthy [-@soskuthy_generalised_2017] and Wieling [-@wieling_analyzing_2018] for full details. Additionally, the start point for each infant’s data (i.e. their first recording session) was indexed in the model. To test for an effect of Data type, model comparisons were run using the *compareML()* function from the *itsadug()* package [@R-itsadug]: the full model including the effect of Data type and the by-Data type random smooth was compared to a model without these terms. Because model summaries for GAMM smooths may be non-conservative [@soskuthy_generalised_2017], smooth plots will be observed alongside any significant effects to determine relevant trends in the data.
 
 Model comparisons revealed a significant effect for Data type on connectivity in the networks over time. See Table \@ref(tab:table-model-output). Figure \@ref(fig:difference-plot-mean-k) shows the difference between Actual and Target connectivity over the course of development. The red line indicates periods of significant difference, showing that Actual vs. Target connectivity was significantly different throughout the period of analysis; Actual forms were always more well-connected than Target forms. This contrasts with the expectations set out above. However, Figure \@ref(fig:difference-plot-mean-k) clearly shows an increase in the difference in connectivity between Actual and Target forms over the period of data collection, supporting the expectation that Target and Actual forms are more similar earlier on in development, with an increasing difference in mean connectivity over the course of the analysis, favouring higher connectivity in Actual, compared with Target, forms.  
 

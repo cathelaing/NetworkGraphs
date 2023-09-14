@@ -13,7 +13,7 @@ Mean connectivity (Actual vs. Target): GAMM & 3 & 173.71 & <0.001\\
 \efloatseparator
  
 \begin{longtable}[t]{ccccccccc}
-\caption{\label{tab:table-real-sim}Outputs from linear regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient.}\\
+\caption{\label{tab:table-real-sim}Outputs from linear mixed effects regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient.}\\
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
 \cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
@@ -31,7 +31,7 @@ Network size & NA & NA & NA & NA & -0.001 & 0.00 & -11.128 & <0.001\\
 \efloatseparator
  
 \begin{longtable}[t]{ccccccccc}
-\caption{\label{tab:table-actual-target}Outputs from linear regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient.}\\
+\caption{\label{tab:table-actual-target}Outputs from linear mixed effects regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient.}\\
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
 \cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
