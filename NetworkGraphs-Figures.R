@@ -18,10 +18,10 @@ path_length_plot <- ggplot(data=subset(SWD_red,
   geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
   scale_fill_discrete(name="Data type",
                       breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                      labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                      labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   scale_colour_discrete(name="Data type",
                         breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                        labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                        labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   xlab("Network size (number of nodes)") +
   ylab("Mean Path Length") +
   theme_bw()  +
@@ -46,10 +46,10 @@ clust_coef_plot <- ggplot(data=subset(SWD_red,
   geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
   scale_fill_discrete(name="Data type",
                       breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                      labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                      labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   scale_colour_discrete(name="Data type",
                       breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                      labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                      labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   xlab("Network size (number of nodes)") +
   ylab("Clustering Coefficient") +
   theme_bw()  +
@@ -76,10 +76,10 @@ path_length_plot_age <- ggplot(data=subset(SWD_red,
   geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
   scale_fill_discrete(name="Data type",
                       breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                      labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                      labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   scale_colour_discrete(name="Data type",
                         breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                        labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                        labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   xlab("Age (months)") +
   ylab("Mean Path Length") +
   theme_bw()  +
@@ -104,10 +104,10 @@ clust_coef_plot_age <- ggplot(data=subset(SWD_red,
   geom_smooth(size = 2, aes(fill = data_type, colour = data_type)) +
   scale_fill_discrete(name="Data type",
                       breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                      labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                      labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   scale_colour_discrete(name="Data type",
                         breaks=c("actual", "Erdos_Renyi", "WS_actual"),
-                        labels=c("Real", "Simulated - random (Erdos–Renyi)", "Simulated - small world (Watts-Strogatz)")) +
+                        labels=c("Real", "Simulated - random (Erdos Renyi)", "Simulated - small world (Watts-Strogatz)")) +
   xlab("Age (months)") +
   ylab("Clustering Coefficient") +
   theme_bw()  +
