@@ -13,10 +13,12 @@ Lily_target <- as.matrix(Lily_target_saved)
 Q1_actual <- quantile(Lily_actual[Lily_actual > 0], 0.25)
 
 Lily_actual <- ifelse(Lily_actual>Q1_actual, NA, Lily_actual)
+Lily_actual <- ifelse(Lily_actual==0, 0.1, Lily_actual)
 
 Q1_target <- quantile(Lily_target[Lily_target > 0], 0.25)
 
 Lily_target <- ifelse(Lily_target>Q1_target, NA, Lily_target)
+Lily_target <- ifelse(Lily_target==0, 0.1, Lily_target)
 
 # Transform it in a network graph format
 network_actual <- graph_from_adjacency_matrix(Lily_actual, weighted = TRUE, diag=F)
@@ -29,7 +31,7 @@ network_target <- delete_edges(network_target, E(network_target)[is.na(E(network
 flip <- function(x) max(x)-x+1  # function to flip the values so that wider edges = closer connection
 
 # Make the graph
-ggraph(network_actual) +
+lily_actual <- ggraph(network_actual) +
   geom_edge_link(aes(edge_width=(edge_width=flip(weight))),
                     edge_colour="grey", edge_alpha=0.1) +
   geom_node_point(color="#69b3a2", size=8) +
@@ -41,7 +43,7 @@ ggraph(network_actual) +
     plot.margin=unit(rep(1,4), "cm")
   )
 
-ggraph(network_target) +
+lily_target <- ggraph(network_target) +
   geom_edge_link(aes(edge_width=flip(weight)), edge_colour="grey", edge_alpha=0.1) +
   geom_node_point(color="#69b3a2", size=8) +
   geom_node_text(aes(label=name), repel = TRUE, size=8, color="#69b3a2") +
