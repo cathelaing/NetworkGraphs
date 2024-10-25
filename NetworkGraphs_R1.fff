@@ -1,0 +1,43 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/Figure-network-graph-1.pdf}
+\caption{\label{fig:Figure-network-graph}Two networks generated from one English-acquiring infant's data. The networks incorporate all words produced by the child upto and including age 14 months. The Target network is shown on the left, and the Actual network on the right. Teal dots represent nodes (words) in the network, and lines between the dots are the edges. Thicker lines represent shorter phonological distances (these are also visually represented in graph space, whereby closer phonological distance is represented by nodes plotted more closely together). Words represent the target words, though note that the Actual network plots distance between words as produced by the infant. Hermit words had a scaled distance of \textgreater.25 with all other words in the network.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/Figure-path-length-1.pdf}
+\caption{\label{fig:Figure-path-length}Change in mean path length as network size increases, in Real vs.~Simulated (random and small-world) data. English and French data is plotted separately. Coloured lines represent Data type; coloured bands represent 95\% CIs. See S2 for the same data plotted according to the effect of Age.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/Figure-clust-coef-1.pdf}
+\caption{\label{fig:Figure-clust-coef}Change in clustering coefficient as network size increases, in Real vs.~Simulated (random and small-world) data. English and French data is plotted separately. Coloured lines represent Data type; coloured bands represent 95\% CIs. See S2 for the same data plotted according to the effect of Age.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/Figure-path-length-DT-1.pdf}
+\caption{\label{fig:Figure-path-length-DT}Change in mean path length as network size increases, in Actual vs.~Target data. English and French data is plotted separately. Coloured lines represent Data type; coloured bands represent 95\% CIs. See S2 for the same data plotted according to the effect of Age.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/Figure-clust-coef-DT-1.pdf}
+\caption{\label{fig:Figure-clust-coef-DT}Change in mean clustering coefficient as network size increases, in Actual vs.~Target data. English and French data is plotted separately. Coloured lines represent Data type; coloured bands represent 95\% CIs. See S2 for the same data plotted according to the effect of Age.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{NetworkGraphs_R1_files/figure-latex/difference-plot-mean-k-1.pdf}
+\caption{\label{fig:difference-plot-mean-k}Difference smooth plot showing difference between connectivity (mean k) in Actual vs.~Target forms from the GAMM model specified above. Shaded area shows 95\% confidence intervals, red line along x-axis indicates months in which
+the difference between Actual and Target forms was significant.}
+\end{figure*}

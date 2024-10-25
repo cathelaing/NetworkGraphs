@@ -1,0 +1,100 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\caption{\label{tab:Table-network-size}Number of word types in each child's network at each month. Network size is cumulative such that values in each month include the word types produced in all previous months. Empty cells represent months in which a given infant did not have a recording.}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{llllllllllllllllllllll}
+\toprule
+Speaker & Corpus & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28 & 29 & 30\\
+\midrule
+Alex & English &  &  &  &  &  & 2 & 6 & 8 & 26 & 42 & 56 & 63 & 94 & 96 & 101 & 107 & 137 & 170 & 222 & 276\\
+Lily & English &  &  & 12 & 15 &  & 16 & 20 & 26 & 53 & 117 & 167 & 214 & 272 & 325 & 368 & 401 & 417 & 444 & 456 & 475\\
+Naima & English & 6 & 24 & 40 & 62 & 140 & 221 & 274 & 338 & 367 & 406 & 441 & 455 & 475 & 484 & 504 & 513 & 530 & 547 & 564 & 565\\
+Violet & English &  &  &  & 3 &  & 6 & 9 & 17 & 39 & 59 & 109 & 164 & 198 & 224 & 268 & 292 & 325 &  & 379 & 396\\
+William & English &  &  &  &  &  & 35 &  & 76 & 99 & 157 & 180 & 200 & 214 & 221 & 235 & 245 & 264 & 286 & 302 & 312\\
+\addlinespace
+Anais & French &  & 2 & 4 & 9 & 20 & 21 & 46 & 48 & 51 & 54 & 56 & 70 & 120 & 133 &  & 174 & 189 & 226 & 276 & 285\\
+Marie & French &  & 108 & 110 & 112 &  &  & 117 & 123 & 131 & 134 & 137 & 164 & 203 & 234 & 260 & 288 &  &  & 336 & 374\\
+Nathan & French &  & 2 & 5 &  & 6 & 14 & 19 & 21 & 25 & 27 & 32 & 33 & 43 & 57 &  & 89 & 92 & 119 & 141 & 168\\
+Tim & French & 3 & 17 & 21 &  & 40 & 60 & 80 & 106 & 148 & 173 & 219 & 281 & 304 & 310 & 333 &  & 384 & 421 & 443 & 469\\
+\bottomrule
+\end{tabular}}
+\end{table*}
+\efloatseparator
+ 
+\begin{longtable}[t]{cccc}
+\caption{\label{tab:Table-IPA-egs}IPA transcriptions of Actual and Target forms produced by one English-acquiring infant's data, including one token of all words produced upto and including 14 months.}\\
+\toprule
+Gloss & Age & Target & Actual\\
+\midrule
+baby & 13 & beɪbi & tɛdɛ\\
+cow & 13 & kaʊ & hʌ\\
+daddy & 13 & dædi & dɛðɪ\\
+dog & 13 & dɑg & dʌ\\
+duck & 13 & dʌk & dɛ\\
+\addlinespace
+duckie & 13 & dʌki & dɪðeɪ\\
+hi & 13 & haɪ & hɛ\\
+mommy & 13 & mɑmi & ʌwɛ\\
+moon & 13 & mun & mʌm\\
+puppy & 13 & pʌpi & bəbɛ\\
+\addlinespace
+teddy & 13 & tɛdi & dædɪ\\
+yes & 13 & jæ & hɛ\\
+ball & 14 & bɑl & ʊwʌ\\
+doggie & 14 & dɑgi & hæveɪ\\
+eye & 14 & aɪ & ɛ\\
+\addlinespace
+kitty & 14 & kɪti & kizɪ\\
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[t]{cccc}
+\caption{\label{tab:table-model-output}Outputs from nested model comparisons testing the effect of data type (Real vs. Simulated and Actual vs. Target on mean path length and clustering coefficient.}\\
+\toprule
+Model & Df & Chisq & p\\
+\midrule
+Mean Path Length (Real vs. Simulated) & 2 & 585.94 & <0.001\\
+Mean Path Length (Actual vs. Target) & 1 & 187.86 & <0.001\\
+Clustering Coefficient (Real vs. Simulated) & 2 & 1325.23 & <0.001\\
+Clustering Coefficient (Actual vs. Target) & 1 & 269.41 & <0.001\\
+Mean connectivity (Actual vs. Target): GAMM & 3 & 182.63 & <0.001\\
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[t]{ccccccccc}
+\caption{\label{tab:table-real-sim}Outputs from linear mixed effects regression models testing comparisons of Real vs. Simulated data on mean path length and clustering coefficient.}\\
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+Effect & beta & SE & t & p & beta & SE & t & p\\
+\midrule
+Intercept & 0.599 & 0.12 & 5.143 & <0.001 & 0.770 & 0.02 & 34.163 & <0.001\\
+Real vs. Erdős–Rényi & 1.915 & 0.06 & 33.152 & <0.001 & -0.673 & 0.01 & -72.649 & <0.001\\
+Real vs. Watts-Strogatz & 0.321 & 0.06 & 5.668 & <0.001 & 0.156 & 0.01 & 17.217 & <0.001\\
+Corpus & 0.468 & 0.05 & 9.813 & <0.001 & -0.014 & 0.01 & -1.228 & 0.246\\
+Age & 0.000 & 0.00 & -0.027 & 0.979 & 0.002 & 0.00 & 1.888 & 0.064\\
+\addlinespace
+Network size & NA & NA & NA & NA & 0.000 & 0.00 & -10.470 & <0.001\\
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[t]{ccccccccc}
+\caption{\label{tab:table-actual-target}Outputs from linear mixed effects regression models testing comparisons of Actual vs. Target data on mean path length and clustering coefficient.}\\
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Mean path length} & \multicolumn{4}{c}{Clustering coefficient} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-9}
+Effect & beta & SE & t & p & beta & SE & t & p\\
+\midrule
+Intercept & -0.080 & 0.10 & -0.801 & 0.446 & 0.9340 & 0.03 & 32.438 & <0.001\\
+Actual vs. Target & 0.192 & 0.01 & 16.375 & <0.001 & -0.1143 & 0.01 & -21.043 & <0.001\\
+Corpus & 1.600 & 0.04 & 45.453 & <0.001 & -0.0274 & 0.01 & -3.790 & <0.001\\
+Age & 0.005 & 0.00 & 1.348 & 0.195 & -0.0056 & 0.00 & -4.453 & <0.001\\
+Network size & 0.000 & 0.00 & 4.233 & 0.001 & -0.0004 & 0.00 & -14.009 & <0.001\\
+\bottomrule
+\end{longtable}

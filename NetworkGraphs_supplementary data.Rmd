@@ -153,22 +153,22 @@ In the main paper, figures showing change in mean path length and clustering coe
 
 ```{r Figure-path-length-age, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(path_length_plot_age)
-cap <- sprintf("Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs. English and French data is plotted separately.")
 ```
 
 ```{r Figure-path-length-DT-age, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(path_length_plot_DT_age)
-cap <- sprintf("Change in mean path length over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean path length over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs. English and French data is plotted separately.")
 ```
 
 ```{r Figure-clust-coef-age, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(clust_coef_plot_age)
-cap <- sprintf("Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős–Rényi) networks. Coloured lines represent Data type; coloured bands represent 95%% CIs. English and French data is plotted separately.")
 ```
 
 ```{r Figure-clust-coef-DT-age, echo=FALSE, fig.cap=cap, fig.pos='H', message=FALSE, warning=FALSE}
 plot(clust_coef_plot_DT_age)
-cap <- sprintf("Change in mean clustering coefficient over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs.")
+cap <- sprintf("Change in mean clustering coefficient over time, in Actual vs. Target data. Coloured lines represent Data type; coloured bands represent 95%% CIs. English and French data is plotted separately.")
 ```
 
 

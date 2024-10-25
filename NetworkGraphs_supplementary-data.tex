@@ -54,14 +54,28 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 \ifLuaTeX
 \usepackage[bidi=basic]{babel}
 \else
@@ -115,13 +129,13 @@
   {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
 \makeatother
 
-% \usepackage{etoolbox}
 \makeatletter
-\patchcmd{\HyOrg@maketitle}
+\usepackage{etoolbox}
+\patchcmd{\maketitle}
   {\section{\normalfont\normalsize\abstractname}}
   {\section*{\normalfont\normalsize\abstractname}}
   {}{\typeout{Failed to patch abstract.}}
-\patchcmd{\HyOrg@maketitle}
+\patchcmd{\maketitle}
   {\section{\protect\normalfont{\@title}}}
   {\section*{\protect\normalfont{\@title}}}
   {}{\typeout{Failed to patch title.}}
@@ -149,7 +163,7 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -180,56 +194,51 @@ Correspondence concerning this article should be addressed to Catherine E. Laing
 \begin{document}
 \maketitle
 
-\hypertarget{s1-testing-model-fit}{%
-\subsection{S1: Testing model fit}\label{s1-testing-model-fit}}
+\subsection{S1: Testing model fit}\label{s1-testing-model-fit}
 
 Nested model comparisons were initially used to establish the best model fit for the data without the inclusion of Data type. Model comparisons testing Network size (\emph{numNodes in the model}) are shown below. Including Network size alongside Age improved model fit for all models except the initial model testing mean path length.
 
-\hypertarget{mean-path-length}{%
-\subsubsection{Mean Path Length}\label{mean-path-length}}
+\subsubsection{Mean Path Length}\label{mean-path-length}
 
 \begin{verbatim}
 ## Data: subset(SWD_red, data_type %in% c("actual", "WS_actual", "Erdos_Renyi"))
 ## Models:
 ## MPL.0: path_length ~ corpus + age + (1 + age | Speaker)
 ## MPL.1: path_length ~ corpus + age + numNodes + (1 + age | Speaker)
-##       npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
-## MPL.0    7 1039.0 1067.5 -512.49   1025.0                     
-## MPL.1    8 1040.7 1073.2 -512.36   1024.7 0.2726  1     0.6016
+##       npar    AIC    BIC  logLik deviance Chisq Df Pr(>Chisq)
+## MPL.0    7 1203.3 1231.8 -594.65   1189.3                    
+## MPL.1    8 1205.6 1238.2 -594.81   1189.6     0  1          1
 \end{verbatim}
 
-\hypertarget{clustering-coefficient}{%
-\subsubsection{Clustering coefficient}\label{clustering-coefficient}}
+\subsubsection{Clustering coefficient}\label{clustering-coefficient}
 
 \begin{verbatim}
 ## Data: subset(SWD_red, data_type %in% c("actual", "WS_actual", "Erdos_Renyi"))
 ## Models:
 ## CC.0: clust_coef_avg ~ corpus + age + (1 + age | Speaker)
 ## CC.1: clust_coef_avg ~ corpus + age + numNodes + (1 + age | Speaker)
-##      npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)    
-## CC.0    7 376.71 405.17 -181.35   362.71                         
-## CC.1    8 367.79 400.32 -175.90   351.79 10.916  1  0.0009535 ***
+##      npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)   
+## CC.0    7 376.16 404.63 -181.08   362.16                        
+## CC.1    8 369.98 402.53 -176.99   353.98 8.1732  1   0.004251 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-\hypertarget{data-type-mean-path-length}{%
-\subsubsection{Data type: Mean path length}\label{data-type-mean-path-length}}
+\subsubsection{Data type: Mean path length}\label{data-type-mean-path-length}
 
 \begin{verbatim}
 ## Data: subset(SWD_red, data_type %in% c("actual", "target"))
 ## Models:
 ## MPL.DT.0: path_length ~ corpus + age + (1 + age | Speaker)
 ## MPL.DT.1: path_length ~ corpus + age + numNodes + (1 + age | Speaker)
-##          npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)    
-## MPL.DT.0    7 -100.59  -74.83 57.296  -114.59                         
-## MPL.DT.1    8 -147.18 -117.74 81.589  -163.18 48.586  1  3.161e-12 ***
+##          npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)  
+## MPL.DT.0    7 -273.91 -248.15 143.96  -287.91                       
+## MPL.DT.1    8 -278.53 -249.09 147.27  -294.53 6.6222  1    0.01007 *
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-\hypertarget{data-type-clustering-coefficient}{%
-\subsubsection{Data type: Clustering coefficient}\label{data-type-clustering-coefficient}}
+\subsubsection{Data type: Clustering coefficient}\label{data-type-clustering-coefficient}
 
 \begin{verbatim}
 ## Data: subset(SWD_red, data_type %in% c("actual", "target"))
@@ -237,39 +246,38 @@ Nested model comparisons were initially used to establish the best model fit for
 ## CC.DT.0: clust_coef_avg ~ corpus + age + (1 + age | Speaker)
 ## CC.DT.1: clust_coef_avg ~ corpus + age + numNodes + (1 + age | Speaker)
 ##         npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)    
-## CC.DT.0    7 -539.31 -513.55 276.65  -553.31                         
-## CC.DT.1    8 -578.48 -549.04 297.24  -594.48 41.168  1  1.397e-10 ***
+## CC.DT.0    7 -632.59 -606.83  323.3  -646.59                         
+## CC.DT.1    8 -664.80 -635.35  340.4  -680.80 34.205  1   4.96e-09 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-\hypertarget{s2-running-figures-with-age-instead-of-network-size}{%
-\subsection{S2: Running figures with Age instead of Network size}\label{s2-running-figures-with-age-instead-of-network-size}}
+\subsection{S2: Running figures with Age instead of Network size}\label{s2-running-figures-with-age-instead-of-network-size}
 
 In the main paper, figures showing change in mean path length and clustering coefficient are visualised in relation to changing network size. Figures \ref{fig:Figure-path-length-age}-\ref{fig:Figure-clust-coef-DT-age} plot the same data according to Age in months.
 
 \begin{figure}
 \centering
 \includegraphics{NetworkGraphs_supplementary-data_files/figure-latex/Figure-path-length-age-1.pdf}
-\caption{\label{fig:Figure-path-length-age}Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdos--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-path-length-age}Change in mean path length over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs. English and French data is plotted separately.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{NetworkGraphs_supplementary-data_files/figure-latex/Figure-path-length-DT-age-1.pdf}
-\caption{\label{fig:Figure-path-length-DT-age}Change in mean path length over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-path-length-DT-age}Change in mean path length over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs. English and French data is plotted separately.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{NetworkGraphs_supplementary-data_files/figure-latex/Figure-clust-coef-age-1.pdf}
-\caption{\label{fig:Figure-clust-coef-age}Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdos--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-clust-coef-age}Change in mean clustering coefficient over time, in Real data (Actual) compared with Simulated small-world (Watts-Strogatz) and random (Erdős--Rényi) networks. Coloured lines represent Data type; coloured bands represent 95\% CIs. English and French data is plotted separately.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{NetworkGraphs_supplementary-data_files/figure-latex/Figure-clust-coef-DT-age-1.pdf}
-\caption{\label{fig:Figure-clust-coef-DT-age}Change in mean clustering coefficient over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs.}
+\caption{\label{fig:Figure-clust-coef-DT-age}Change in mean clustering coefficient over time, in Actual vs.~Target data. Coloured lines represent Data type; coloured bands represent 95\% CIs. English and French data is plotted separately.}
 \end{figure}
 
 

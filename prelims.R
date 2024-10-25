@@ -24,8 +24,6 @@ library(mgcv)
 library(itsadug)
 source("gamm_hacks.r")
 
-# add this to prep files eventually
-
 session_data_P <- read_csv("Data/comparison_data_providence.csv") %>%    # need to add ordinal session numbers for GAMMs
   group_by(Speaker, age) %>%
   tally() %>%
@@ -59,7 +57,8 @@ globalsmallworlddata_L <- feather::read_feather("Data/globalsmallworlddata_compa
 globalsmallworlddata_P <- feather::read_feather("Data/globalsmallworlddata_comparison_providence.feather") %>% 
   mutate(corpus = "English",
          corpus = as.factor(corpus),
-         Speaker = as.factor(Speaker)) %>% 
+         Speaker = as.factor(Speaker),
+         age = as.numeric(age)) %>% 
   left_join(session_data_P)
 
 globalsmallworlddata <- rbind(globalsmallworlddata_P, globalsmallworlddata_L) %>%
