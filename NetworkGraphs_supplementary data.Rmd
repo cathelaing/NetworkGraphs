@@ -8,7 +8,7 @@ author:
   email: catherine.laing@york.ac.uk
 authornote: |
  All code and associated data for this manuscript can be found at https://github.com/cathelaing/NetworkGraphs. Data provided in the PhonBank corpus was collected through support from grant number NIH-NICHHD RO1-HD051698. 
-shorttitle: Network graphs of early phonological development
+#shorttitle: Network graphs of early phonological development
 output:
   papaja::apa6_pdf: default
   #extra_dependencies: ["float"]
@@ -29,6 +29,9 @@ documentclass: apa6
 header-includes:
 -  \DeclareDelayedFloatFlavor{kableExtra}{table}
 - \usepackage{tipa}
+- \usepackage{fancyhdr}
+- \pagestyle{empty}
+- \thispagestyle{empty}
 #- \newfontfamily\PF{Arial}
 classoption: man
 affiliation:
