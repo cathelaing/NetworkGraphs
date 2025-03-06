@@ -25,7 +25,7 @@ Tim & French & 3 & 17 & 21 &  & 40 & 60 & 80 & 106 & 148 & 173 & 219 & 281 & 304
 \efloatseparator
  
 \begin{longtable}[t]{cccc}
-\caption{\label{tab:Table-IPA-egs}IPA transcriptions of Actual and Target forms produced by one English-acquiring infant's data, including one token of all words produced upto and including 14 months.}\\
+\caption{\label{tab:Table-IPA-egs}IPA transcriptions of Actual and Target forms produced by one English-acquiring infant's data, including one token of all words produced up to and including 14 months.}\\
 \toprule
 Gloss & Age & Target & Actual\\
 \midrule
